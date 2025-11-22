@@ -19,6 +19,8 @@ import postulatum.plantum.plantum.StarterHeader
 
 import postulatum.plantum.plantum.model.*
 
+
+
 @Composable
 fun DashboardScreen(
     userName: String?,
@@ -27,6 +29,8 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = viewModel { DashboardViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var extendedSemesters by remember { mutableStateOf<Set<Semester>>(setOf()) }
+
     StarterHeader(
         userName = userName,
         logo = logo
@@ -80,8 +84,15 @@ fun DashboardScreen(
                                 .horizontalScroll(rememberScrollState()),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
+                            fun onClickSemester(semester: Semester) {
+                                if (extendedSemesters.contains(semester)) {
+                                    extendedSemesters -= semester
+                                } else {
+                                    extendedSemesters += semester
+                                }
+                            }
                             for (semester in slot.semester) {
-                                SemesterCard(semester = semester)
+                                SemesterCard(semester = semester, isExtended = extendedSemesters.contains(semester), onClick = { onClickSemester(semester) })
                             }
                         }
                     }
