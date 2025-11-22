@@ -4,10 +4,10 @@ plugins {
     application
 }
 
-group = "postulatum.plantum"
+group = "postulatum.plantum.plantum"
 version = "1.0.0"
 application {
-    mainClass.set("postulatum.plantum.ApplicationKt")
+    mainClass.set("postulatum.plantum.plantum.ApplicationKt")
     
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")

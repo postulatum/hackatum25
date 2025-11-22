@@ -1,4 +1,4 @@
-rootProject.name = "planTUM"
+rootProject.name = "plantum"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
