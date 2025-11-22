@@ -39,37 +39,11 @@ fun App() {
                 onLoginSuccess = { user -> loggedInUser = user }
             )
         } else {
-            var showContent by remember { mutableStateOf(false) }
-            Column(
-                modifier = Modifier
-                    .background(Color.White)
-                    .safeContentPadding()
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                StarterHeader(
-                    userName = loggedInUser,
-                    logo = painterResource(Res.drawable.plantum_logo)
-                )
-                Spacer(Modifier.height(24.dp))
-                Text("Welcome, ${'$'}loggedInUser")
-                Button(onClick = { showContent = !showContent }) {
-                    Text("Toggle content")
-                }
-                Button(onClick = { loggedInUser = null }) {
-                    Text("Abmelden")
-                }
-                AnimatedVisibility(showContent) {
-                    val greeting = remember { Greeting().greet() }
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Image(painterResource(Res.drawable.compose_multiplatform), null)
-                        Text("Compose: ${'$'}greeting")
-                    }
-                }
-            }
+            DashboardScreen(
+                userName = loggedInUser,
+                logo = painterResource(Res.drawable.plantum_logo),
+                onLogout = { loggedInUser = null }
+            )
         }
     }
 }
