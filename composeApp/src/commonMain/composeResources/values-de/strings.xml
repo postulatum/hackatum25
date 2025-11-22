@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">TUM Semester-Planer</string>
+    
+    <!-- Categories -->
+    <string name="category_elective">Informatik Wahlmodule</string>
+    <string name="category_profile">Profilbildung</string>
+    <string name="category_soft_skills">Überfachliche Grundlagen</string>
+    <string name="category_thesis">Master-Arbeit</string>
+    <string name="category_idp">Interdisciplinary Project (IDP)</string>
+    <string name="category_seminar">Master-Seminar</string>
+    <string name="category_practical">Advanced Practical Course</string>
+    <string name="category_misc">Sonstiges</string>
+    
+    <!-- Areas -->
+    <string name="area_alg">ALG - Algorithms</string>
+    <string name="area_cgv">CGV - Computer Graphics and Vision</string>
+    <string name="area_dbi">DBI - Databases and Information Systems</string>
+    <string name="area_dbm">DBM - Digital Biology and Digital Medicine</string>
+    <string name="area_se">SE - Engineering Software-intensive Systems</string>
+    <string name="area_fma">FMA - Formal Methods and their Applications</string>
+    <string name="area_mla">MLA - Machine Learning and Analytics</string>
+    <string name="area_rrv">RRV - Computer Architecture, Computer Networks, and Distributed Systems</string>
+    <string name="area_rob">ROB - Robotics</string>
+    <string name="area_sp">SP - Security and Privacy</string>
+    <string name="area_hpc">HPC - Scientific Computing and High Performance Computing</string>
+    <string name="area_seminar">Master-Seminar</string>
+    <string name="area_practical">Advanced Practical Course</string>
+    <string name="area_soft_skills">Überfachliche Grundlagen</string>
+    <string name="area_idp">Interdisciplinary Project</string>
+    <string name="area_thesis">Master-Arbeit</string>
+    <string name="area_guided">Guided Research</string>
+    <string name="area_misc">Anderes (z.B. Bachelor-Anerkennung)</string>
 </resources>

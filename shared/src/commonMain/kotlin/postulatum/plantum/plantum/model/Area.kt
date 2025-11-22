@@ -22,5 +22,5 @@ enum class Area {
     IDP,
     THESIS,
     GUIDED,
-    MISC,
+    MISC
 }
