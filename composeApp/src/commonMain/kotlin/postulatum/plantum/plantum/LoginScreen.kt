@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +44,7 @@ private val TextPrimary = Color(0xFF111827)
 private val TextSecondary = Color(0xFF6B7280)
 private val ErrorColor = Color(0xFFEF4444)
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -59,6 +62,10 @@ fun LoginScreen(
     val usernameRequester = remember { FocusRequester() }
     val passwordRequester = remember { FocusRequester() }
     val loginButtonRequester = remember { FocusRequester() }
+
+    val isDark = isSystemInDarkTheme()
+    val highContrastColor = if (!isDark) Color.White else Color.Black
+
 
     fun tryLogin() {
         if (username.lowercase() == "admin" && password == "1234") {
@@ -99,7 +106,8 @@ fun LoginScreen(
                             painter = painterResource(Res.drawable.plantum_logo),
                             contentDescription = null,
                             modifier = Modifier.size(280.dp),
-                            contentScale = ContentScale.Fit
+                            contentScale = ContentScale.Fit,
+                            colorFilter = ColorFilter.tint(highContrastColor)
                         )
                         Spacer(Modifier.height(24.dp))
                         Text(
