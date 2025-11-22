@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import postulatum.plantum.plantum.model.*
-import postulatum.plantum.plantum.data.DummyData
+import postulatum.plantum.plantum.data.SlotRepository
 
 @Composable
 fun DashboardScreen(
@@ -24,8 +24,11 @@ fun DashboardScreen(
     logo: Painter,
     onLogout: () -> Unit
 ) {
-    // Load dummy slots for testing
-    val slots = DummyData.dummySlots
+    // Initialize repository with state management
+    val repository = remember { SlotRepository() }
+    val slots by remember { derivedStateOf { repository.slots } }
+    var showAddSlotDialog by remember { mutableStateOf(false) }
+    var slotToEdit by remember { mutableStateOf<Slot?>(null) }
 
     Column(
         modifier = Modifier
@@ -62,7 +65,10 @@ fun DashboardScreen(
         
         // Slot Overview
         for (slot in slots) {
-            SlotCard(slot = slot) {
+            SlotCard(
+                slot = slot,
+                onEdit = { slotToEdit = it }
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -77,7 +83,17 @@ fun DashboardScreen(
             }
             Spacer(Modifier.height(24.dp))
         }
+        // Add slot button
+        OutlinedButton(
+            onClick = { showAddSlotDialog = true },
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = Color(0xFF10B981)
+            )
+        ) {
+            Text("Neuen Slot hinzufügen")
+        }
         
+        Spacer(Modifier.height(12.dp))
         
         // Logout Button
         OutlinedButton(
@@ -88,6 +104,29 @@ fun DashboardScreen(
         ) {
             Text("Abmelden")
         }
+    }
+    
+    // Show Add Slot Dialog (Create Mode)
+    if (showAddSlotDialog) {
+        AddSlotDialog(
+            onDismiss = { showAddSlotDialog = false },
+            onConfirm = { newSlot ->
+                repository.addSlot(newSlot)
+                showAddSlotDialog = false
+            }
+        )
+    }
+    
+    // Show Edit Slot Dialog (Edit Mode)
+    slotToEdit?.let { slot ->
+        AddSlotDialog(
+            existingSlot = slot,
+            onDismiss = { slotToEdit = null },
+            onConfirm = { updatedSlot ->
+                repository.updateSlot(updatedSlot)
+                slotToEdit = null
+            }
+        )
     }
 }
 

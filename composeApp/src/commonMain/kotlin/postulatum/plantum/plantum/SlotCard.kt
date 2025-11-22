@@ -15,6 +15,7 @@ import postulatum.plantum.plantum.model.Slot
 fun SlotCard(
     slot: Slot,
     modifier: Modifier = Modifier,
+    onEdit: ((Slot) -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     Card(
@@ -28,13 +29,45 @@ fun SlotCard(
         Column(
             modifier = Modifier.padding(24.dp)
         ) {
-            Text(
-                text = slot.name,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF111827),
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            // Header row with title and edit button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = slot.displayName,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF111827)
+                    )
+                    // Show description if available
+                    slot.description?.let { desc ->
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = desc,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFF6B7280)
+                        )
+                    }
+                }
+                
+                if (onEdit != null) {
+                    IconButton(
+                        onClick = { onEdit(slot) },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Text(
+                            text = "✏️",
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+            
+            Spacer(Modifier.height(16.dp))
 
             // Content slot for inner composables
             content()
