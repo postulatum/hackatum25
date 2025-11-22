@@ -1,8 +1,11 @@
 package postulatum.plantum.plantum.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * A semester is a planning unit. It describes a fictitious semester that has not yet been assigned to a specific half-year.
  */
+@Serializable
 data class Semester(val id: String, val name: String, val modules: List<Module>) {
 
     /**

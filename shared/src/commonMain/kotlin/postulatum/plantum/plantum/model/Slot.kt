@@ -1,5 +1,8 @@
 package postulatum.plantum.plantum.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Slot(val id: String, val name: String, val term: Term, val year: UInt, val semester: List<Semester>) {
 
     /**

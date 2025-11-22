@@ -1,5 +1,8 @@
 package postulatum.plantum.plantum.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class ExaminationType {
-    Exam, Project
+    EXAM, PROJECT
 }

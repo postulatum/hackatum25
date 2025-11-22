@@ -1,9 +1,12 @@
 package postulatum.plantum.plantum.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * These values describe the subject areas
  * of the various modules offered.
  */
+@Serializable
 enum class Area {
     ALG,
     CGV,

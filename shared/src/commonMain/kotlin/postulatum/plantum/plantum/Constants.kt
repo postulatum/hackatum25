@@ -2,9 +2,7 @@ package postulatum.plantum.plantum
 
 import postulatum.plantum.plantum.model.Category
 
-const val VERSION = "0.1.0"
-
-const val SERVER_PORT = 8080
+const val SERVER_PORT = 9321
 
 /**
  * The credit goals the master students need to hit for every category.
