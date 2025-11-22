@@ -1,6 +1,5 @@
-package postulatum.plantum.plantum
+package postulatum.plantum.plantum.dashboard
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -14,21 +13,19 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import postulatum.plantum.plantum.StarterHeader
 
 import postulatum.plantum.plantum.model.*
-import postulatum.plantum.plantum.data.SlotRepository
 
 @Composable
 fun DashboardScreen(
     userName: String?,
     logo: Painter,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,    
+    viewModel: DashboardViewModel = viewModel { DashboardViewModel() }
 ) {
-    // Initialize repository with state management
-    val repository = remember { SlotRepository() }
-    val slots by remember { derivedStateOf { repository.slots } }
-    var showAddSlotDialog by remember { mutableStateOf(false) }
-    var slotToEdit by remember { mutableStateOf<Slot?>(null) }
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -64,28 +61,35 @@ fun DashboardScreen(
         Spacer(Modifier.height(48.dp))
         
         // Slot Overview
-        for (slot in slots) {
-            SlotCard(
-                slot = slot,
-                onEdit = { slotToEdit = it }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                if (uiState.isLoading) {
+            CircularProgressIndicator(
+                color = Color(0xFF10B981)
+            )
+        } else {
+            for (slot in uiState.slots) {
+                SlotCard(
+                    slot = slot,
+                    onEdit = { viewModel.showEditDialog(it) }
                 ) {
-                    // Semester Overview inside a slot
-                    for (semester in slot.semester) {
-                        SemesterCard(semester = semester)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        // Semester Overview inside a slot
+                        for (semester in slot.semester) {
+                            SemesterCard(semester = semester)
+                        }
                     }
                 }
+                Spacer(Modifier.height(24.dp))
             }
-            Spacer(Modifier.height(24.dp))
         }
+        
         // Add slot button
         OutlinedButton(
-            onClick = { showAddSlotDialog = true },
+            onClick = { viewModel.showAddDialog() },
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = Color(0xFF10B981)
             )
@@ -107,24 +111,22 @@ fun DashboardScreen(
     }
     
     // Show Add Slot Dialog (Create Mode)
-    if (showAddSlotDialog) {
+    if (uiState.showAddDialog) {
         AddSlotDialog(
-            onDismiss = { showAddSlotDialog = false },
+            onDismiss = { viewModel.hideAddDialog() },
             onConfirm = { newSlot ->
-                repository.addSlot(newSlot)
-                showAddSlotDialog = false
+                viewModel.addSlot(newSlot)
             }
         )
     }
     
     // Show Edit Slot Dialog (Edit Mode)
-    slotToEdit?.let { slot ->
+    uiState.slotToEdit?.let { slot ->
         AddSlotDialog(
             existingSlot = slot,
-            onDismiss = { slotToEdit = null },
+            onDismiss = { viewModel.hideAddDialog() },
             onConfirm = { updatedSlot ->
-                repository.updateSlot(updatedSlot)
-                slotToEdit = null
+                viewModel.updateSlot(updatedSlot)
             }
         )
     }

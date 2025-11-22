@@ -10,7 +10,7 @@ object DummyData {
     val dummySlots = listOf(
         Slot(
             id = "1",
-            term = Term.WiSe,
+            term = Term.WISE,
             year = 2024u,
             description = "Erstes Studienjahr - Grundlagen",
             semester = listOf<Semester>(
@@ -25,7 +25,7 @@ object DummyData {
                             area = Area.ALG,
                             workload = Workload(60u, 30u),
                             credits = 8u,
-                            examType = ExaminationType.Exam,
+                            examType = ExaminationType.EXAM,
                             language = Language.EN,
                             isTheoretical = true
                         )
@@ -42,7 +42,7 @@ object DummyData {
                             area = Area.MLA,
                             workload = Workload(60u, 30u),
                             credits = 8u,
-                            examType = ExaminationType.Exam,
+                            examType = ExaminationType.EXAM,
                             language = Language.EN,
                             isTheoretical = false
                         ),
@@ -53,7 +53,7 @@ object DummyData {
                             area = Area.SE,
                             workload = Workload(45u, 45u),
                             credits = 6u,
-                            examType = ExaminationType.Project,
+                            examType = ExaminationType.PROJECT,
                             language = Language.DE_EN,
                             isTheoretical = false
                         )
@@ -63,7 +63,7 @@ object DummyData {
         ),
         Slot(
             id = "2",
-            term = Term.SoSe,
+            term = Term.SOSE,
             year = 2025u,
             description = null, // Keine Beschreibung
             semester = listOf<Semester>(
@@ -78,7 +78,7 @@ object DummyData {
                             area = Area.DBI,
                             workload = Workload(60u, 30u),
                             credits = 8u,
-                            examType = ExaminationType.Exam,
+                            examType = ExaminationType.EXAM,
                             language = Language.EN,
                             isTheoretical = true
                         )

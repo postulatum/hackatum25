@@ -1,4 +1,4 @@
-package postulatum.plantum.plantum
+package postulatum.plantum.plantum.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -6,7 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -14,7 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import postulatum.plantum.plantum.model.*
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Dialog for adding or editing a slot (academic term).
@@ -23,7 +23,7 @@ import java.util.UUID
  * @param onDismiss Callback when dialog is dismissed
  * @param onConfirm Callback when slot is confirmed (returns the new or updated slot)
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalUuidApi::class)
 @Composable
 fun AddSlotDialog(
     existingSlot: Slot? = null,
@@ -33,7 +33,7 @@ fun AddSlotDialog(
     val isEditMode = existingSlot != null
     
     var description by remember { mutableStateOf(existingSlot?.description ?: "") }
-    var selectedTerm by remember { mutableStateOf(existingSlot?.term ?: Term.WiSe) }
+    var selectedTerm by remember { mutableStateOf(existingSlot?.term ?: Term.WISE) }
     var year by remember { mutableStateOf(existingSlot?.year?.toString() ?: "") }
     var termMenuExpanded by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -66,8 +66,8 @@ fun AddSlotDialog(
                 Box(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
                         value = when (selectedTerm) {
-                            Term.WiSe -> "Wintersemester (WiSe)"
-                            Term.SoSe -> "Sommersemester (SoSe)"
+                            Term.WISE -> "Wintersemester (WiSe)"
+                            Term.SOSE -> "Sommersemester (SoSe)"
                         },
                         onValueChange = {},
                         readOnly = true,
@@ -106,14 +106,14 @@ fun AddSlotDialog(
                             DropdownMenuItem(
                                 text = { Text("Wintersemester (WiSe)", color = Color.White) },
                                 onClick = {
-                                    selectedTerm = Term.WiSe
+                                    selectedTerm = Term.WISE
                                     termMenuExpanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Sommersemester (SoSe)", color = Color.White) },
                                 onClick = {
-                                    selectedTerm = Term.SoSe
+                                    selectedTerm = Term.SOSE
                                     termMenuExpanded = false
                                 }
                             )
@@ -224,7 +224,7 @@ fun AddSlotDialog(
                                     } else {
                                         // Create mode: generate new ID
                                         Slot(
-                                            id = UUID.randomUUID().toString(),
+                                            id = Uuid.random().toString(),
                                             term = selectedTerm,
                                             year = year.toUInt(),
                                             semester = listOf<Semester>(), // Empty initially

@@ -17,12 +17,12 @@ data class Slot(
     val displayName: String
         get() {
             val termStr = when (term) {
-                Term.WiSe -> "WiSe"
-                Term.SoSe -> "SoSe"
+                Term.WISE -> "WiSe"
+                Term.SOSE -> "SoSe"
             }
             val yearStr = when (term) {
-                Term.WiSe -> "$year/${(year + 1u).toString().takeLast(2)}"
-                Term.SoSe -> year.toString()
+                Term.WISE -> "$year/${(year + 1u).toString().takeLast(2)}"
+                Term.SOSE -> year.toString()
             }
             return "$termStr $yearStr"
         }

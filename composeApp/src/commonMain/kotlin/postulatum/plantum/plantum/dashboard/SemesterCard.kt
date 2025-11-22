@@ -1,4 +1,4 @@
-package postulatum.plantum.plantum
+package postulatum.plantum.plantum.dashboard
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
