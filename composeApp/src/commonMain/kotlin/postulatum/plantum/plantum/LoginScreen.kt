@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import plantum.composeapp.generated.resources.Res
 import plantum.composeapp.generated.resources.plantum_logo
+import postulatum.plantum.plantum.model.User
 
 // --- Color Palette Definition (Clean Blue/Grey Theme) ---
 private val AppBgColor = Color(0xFFF3F4F6)
@@ -45,7 +46,7 @@ private val ErrorColor = Color(0xFFEF4444)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onLoginSuccess: (String) -> Unit,
+    onLoginSuccess: (User) -> Unit,
 ) {
     // States
     var username by remember { mutableStateOf("") }
@@ -66,7 +67,7 @@ fun LoginScreen(
 
     fun tryLogin() {
         if (username.lowercase() == "admin" && password == "1234") {
-            onLoginSuccess(username)
+            onLoginSuccess(User(username, "password"))
         } else {
             error = "Ungültige Anmeldedaten! (Versuch: admin / 1234)"
         }

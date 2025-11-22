@@ -1,6 +1,5 @@
 package postulatum.plantum.plantum
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import org.jetbrains.compose.resources.painterResource
@@ -9,23 +8,30 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import plantum.composeapp.generated.resources.Res
 import plantum.composeapp.generated.resources.plantum_logo
 import postulatum.plantum.plantum.dashboard.DashboardScreen
+import postulatum.plantum.plantum.model.User
+import postulatum.plantum.plantum.repositories.UserRepository
 
 @Composable
 @Preview
 fun App() {
 
     MaterialTheme {
-        var loggedInUser by remember { mutableStateOf<String?>(null) }
+        var userState by remember { mutableStateOf<User?>(null) }
+        if(userState != null) { print("User correctly initialized. :)") }
 
-        if (loggedInUser == null) {
+        if (!UserRepository.isInitialized()) {
             LoginScreen(
-                onLoginSuccess = { user -> loggedInUser = user }
+                onLoginSuccess = { user: User ->
+                    UserRepository.initUser(user)
+                    userState = user
+                }
             )
         } else {
+            val user = UserRepository.getUser()
             DashboardScreen(
-                userName = loggedInUser,
+                userName = user.name,
                 logo = painterResource(Res.drawable.plantum_logo),
-                onLogout = { loggedInUser = null }
+                onLogout = { UserRepository.clearUser() }
             )
         }
     }

@@ -2,7 +2,7 @@ package postulatum.plantum.plantum.dashboard
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.*
-import postulatum.plantum.plantum.data.SlotRepository
+import postulatum.plantum.plantum.repositories.SlotRepository
 import postulatum.plantum.plantum.model.Slot
 
 class DashboardViewModel (

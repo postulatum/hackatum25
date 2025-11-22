@@ -1,6 +1,7 @@
-package postulatum.plantum.plantum.data
+package postulatum.plantum.plantum.repositories
 
 import androidx.compose.runtime.mutableStateListOf
+import postulatum.plantum.plantum.data.DummyData
 import postulatum.plantum.plantum.model.Slot
 
 /**
@@ -10,26 +11,26 @@ import postulatum.plantum.plantum.model.Slot
 class SlotRepository {
     private val _slots = mutableStateListOf<Slot>()
     val slots: List<Slot> get() = _slots
-    
+
     init {
         // Load initial dummy data
         _slots.addAll(DummyData.dummySlots)
     }
-    
+
     /**
      * Add a new slot to the repository.
      */
     fun addSlot(slot: Slot) {
         _slots.add(slot)
     }
-    
+
     /**
      * Remove a slot by ID.
      */
     fun removeSlot(slotId: String) {
         _slots.removeAll { it.id == slotId }
     }
-    
+
     /**
      * Update an existing slot.
      */
@@ -39,7 +40,7 @@ class SlotRepository {
             _slots[index] = slot
         }
     }
-    
+
     /**
      * Get a slot by ID.
      */
