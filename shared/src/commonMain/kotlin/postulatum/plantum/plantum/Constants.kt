@@ -3,6 +3,9 @@ package postulatum.plantum.plantum
 import postulatum.plantum.plantum.model.Category
 
 const val SERVER_PORT = 9321
+const val SERVER_IP = "localhost"
+const val BASE_ENPOINT = "/api/v1"
+
 
 /**
  * The credit goals the master students need to hit for every category.

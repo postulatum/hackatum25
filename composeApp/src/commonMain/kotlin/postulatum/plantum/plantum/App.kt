@@ -17,6 +17,8 @@ fun App() {
 
     MaterialTheme {
         var userState by remember { mutableStateOf<User?>(null) }
+
+        // Needed, otherwise the jit-compiler removes userState.
         if(userState != null) { print("User correctly initialized. :)") }
 
         if (!UserRepository.isInitialized()) {

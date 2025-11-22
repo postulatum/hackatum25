@@ -2,6 +2,7 @@ package postulatum.plantum.plantum
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -15,12 +16,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -32,7 +35,14 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import plantum.composeapp.generated.resources.Res
 import plantum.composeapp.generated.resources.plantum_logo
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import postulatum.plantum.plantum.model.LoginData
+import postulatum.plantum.plantum.model.RegisterData
 import postulatum.plantum.plantum.model.User
+import postulatum.plantum.plantum.services.BackendService
 
 // --- Color Palette Definition (Clean Blue/Grey Theme) ---
 private val AppBgColor = Color(0xFFF3F4F6)
@@ -54,6 +64,7 @@ fun LoginScreen(
     var rememberMe by remember { mutableStateOf(false) }
     var passwordVisible by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
+    var loading by remember { mutableStateOf(false) }
 
     var showCreateUser by remember { mutableStateOf(false) }
 
@@ -65,11 +76,26 @@ fun LoginScreen(
     val highContrastColor = if (!isDark) Color.White else Color.Black
 
 
+    val scope = rememberCoroutineScope()
+
     fun tryLogin() {
-        if (username.lowercase() == "admin" && password == "1234") {
-            onLoginSuccess(User(username, "password"))
-        } else {
-            error = "Ungültige Anmeldedaten! (Versuch: admin / 1234)"
+        // Basic validation
+        if (username.isBlank() || password.isBlank()) {
+            error = "Bitte E-Mail und Passwort eingeben."
+            return
+        }
+        error = null
+        loading = true
+        scope.launch {
+            try {
+                val user: User = BackendService.login(LoginData(email = username.trim(), password = password))
+                val display = user.userName?.takeIf { it.isNotBlank() } ?: user.email
+                onLoginSuccess(user)
+            } catch (t: Throwable) {
+                error = t.message ?: "Login fehlgeschlagen. Bitte erneut versuchen."
+            } finally {
+                loading = false
+            }
         }
     }
 
@@ -445,6 +471,8 @@ fun CreateUserModal(onDismiss: () -> Unit) {
 
     var createError by remember { mutableStateOf<String?>(null) }
     var createInfo by remember { mutableStateOf<String?>(null) }
+    var creating by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
 
     fun validateCreate(): String? {
@@ -648,16 +676,44 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                             if (err != null) {
                                 createError = err
                                 createInfo = null
-                            } else {
-                                createError = null
-                                createInfo = "Benutzer $newUserName ($newUserRegion) angelegt! (Demo)"
+                                return@Button
+                            }
+
+                            creating = true
+                            createError = null
+                            createInfo = null
+                            scope.launch {
+                                try {
+                                    val user = BackendService.register(
+                                        RegisterData(
+                                            email = newEmail.trim(),
+                                            password = newPassword,
+                                            userName = newUserName.ifBlank { null }
+                                        )
+                                    )
+                                    createInfo = "Registrierung erfolgreich: ${'$'}{user.email}"
+                                    // Close the dialog after short success message
+                                    onDismiss()
+                                } catch (t: Throwable) {
+                                    createError = t.message ?: "Registrierung fehlgeschlagen."
+                                } finally {
+                                    creating = false
+                                }
                             }
                         },
                         modifier = Modifier.weight(1f).height(48.dp),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
                     ) {
-                        Text("Registrieren", fontWeight = FontWeight.Bold)
+                        if (creating) {
+                            CircularProgressIndicator(
+                                color = Color.White,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        } else {
+                            Text("Registrieren", fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }

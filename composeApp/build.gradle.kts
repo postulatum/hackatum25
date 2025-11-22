@@ -30,11 +30,14 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(projects.shared)            
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-        
+            implementation(libs.androidx.lifecycle.viewmodelCompose)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(projects.shared)
+            implementation(libs.ktorClientCore)
+            implementation(libs.ktorClientCio)
+            implementation(libs.ktorSerialization)
+            implementation(libs.ktorClientContentNegotiation)
+            implementation(libs.kotlinxCoroutines)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

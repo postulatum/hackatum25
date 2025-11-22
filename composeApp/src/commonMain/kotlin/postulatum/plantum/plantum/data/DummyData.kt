@@ -10,14 +10,14 @@ object DummyData {
     val dummySlots = listOf(
         Slot(
             id = "1",
+            description = "Wintersemester 2024/25",
             term = Term.WISE,
             year = 2024u,
-            description = "Erstes Studienjahr - Grundlagen",
-            semester = listOf<Semester>(
+            semester = listOf(
                 Semester(
                     id = "sem1",
                     name = "1. Semester",
-                    modules = listOf<Module>(
+                    modules = listOf(
                         Module(
                             id = "mod1",
                             tumId = "IN2011",
@@ -34,7 +34,7 @@ object DummyData {
                 Semester(
                     id = "sem2",
                     name = "2. Semester",
-                    modules = listOf<Module>(
+                    modules = listOf(
                         Module(
                             id = "mod2",
                             tumId = "IN2012",
@@ -63,14 +63,14 @@ object DummyData {
         ),
         Slot(
             id = "2",
+            description = "Sommersemester 2025",
             term = Term.SOSE,
             year = 2025u,
-            description = null, // Keine Beschreibung
-            semester = listOf<Semester>(
+            semester = listOf(
                 Semester(
                     id = "sem3",
                     name = "3. Semester",
-                    modules = listOf<Module>(
+                    modules = listOf(
                         Module(
                             id = "mod4",
                             tumId = "IN2014",
