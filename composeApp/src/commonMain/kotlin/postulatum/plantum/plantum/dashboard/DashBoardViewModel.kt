@@ -21,7 +21,7 @@ class DashboardViewModel (
     private fun loadSlots() {
         _uiState.update { 
             it.copy(
-                slots = repository.slots,
+                slots = repository.getSlots(),
                 isLoading = false
             )
         }
@@ -45,7 +45,7 @@ class DashboardViewModel (
         repository.addSlot(slot)
         _uiState.update { 
             it.copy(
-                slots = repository.slots,
+                slots = repository.getSlots(),
                 showAddDialog = false
             )
         }
@@ -65,7 +65,7 @@ class DashboardViewModel (
         repository.updateSlot(slot)
         _uiState.update { 
             it.copy(
-                slots = repository.slots,
+                slots = repository.getSlots(),
                 slotToEdit = null
             )
         }
@@ -73,7 +73,7 @@ class DashboardViewModel (
     
     fun deleteSlot(slotId: String) {
         repository.removeSlot(slotId)
-        _uiState.update { it.copy(slots = repository.slots) }
+        _uiState.update { it.copy(slots = repository.getSlots()) }
     }
     
     // ViewModel wird automatisch cleared, wenn nicht mehr gebraucht

@@ -10,11 +10,14 @@ import postulatum.plantum.plantum.model.Slot
  */
 class SlotRepository {
     private val _slots = mutableStateListOf<Slot>()
-    val slots: List<Slot> get() = _slots
 
     init {
         // Load initial dummy data
         _slots.addAll(DummyData.dummySlots)
+    }
+
+    fun getSlots(): List<Slot> {
+        return _slots
     }
 
     /**

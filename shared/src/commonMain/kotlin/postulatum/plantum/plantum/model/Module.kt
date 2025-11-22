@@ -15,5 +15,6 @@ data class Module(
     val credits: UInt,
     val examType: ExaminationType,
     val language: Language,
-    val isTheoretical: Boolean
+    val isTheoretical: Boolean,
+    val category : Category? = null
 )
