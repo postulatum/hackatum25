@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import postulatum.plantum.plantum.StarterHeader
 
 import postulatum.plantum.plantum.model.*
+import postulatum.plantum.plantum.data.DummyData
 
 
 
@@ -95,6 +96,11 @@ fun DashboardScreen(
                                 SemesterCard(semester = semester, isExtended = extendedSemesters.contains(semester), onClick = { onClickSemester(semester) })
                             }
                         }
+                        Spacer(Modifier.height(8.dp))
+                        OutlinedButton(
+                            onClick = { viewModel.showAddSemesterDialogFor(slot.id) },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF0EA5E9))
+                        ) { Text("Semester hinzufügen") }
                     }
                     Spacer(Modifier.height(24.dp))
                 }
@@ -154,6 +160,24 @@ fun DashboardScreen(
             onDismiss = { viewModel.hideAddDialog() },
             onConfirm = { updatedSlot ->
                 viewModel.updateSlot(updatedSlot)
+            }
+        )
+    }
+
+    // Show Add Semester Dialog
+    if (uiState.showAddSemesterDialog) {
+        val allModules = remember {
+            // Aggregiere mögliche Module aus DummyData (Platzhalter für echte Mock-Daten)
+            DummyData.dummySlots
+                .flatMap { it.semester }
+                .flatMap { it.modules }
+                .distinctBy { it.id }
+        }
+        SemesterDialog(
+            availableModules = allModules,
+            onDismiss = { viewModel.hideAddSemesterDialog() },
+            onConfirm = { semester ->
+                viewModel.addSemesterToSelected(semester)
             }
         )
     }

@@ -3,6 +3,7 @@ package postulatum.plantum.plantum.repositories
 import androidx.compose.runtime.mutableStateListOf
 import postulatum.plantum.plantum.data.DummyData
 import postulatum.plantum.plantum.model.Slot
+import postulatum.plantum.plantum.model.Semester
 
 /**
  * Repository for managing slots (academic terms).
@@ -41,6 +42,14 @@ class SlotRepository {
         val index = _slots.indexOfFirst { it.id == slot.id }
         if (index != -1) {
             _slots[index] = slot
+        }
+    }
+
+    fun addSemesterToSlot(slotId: String, semester: Semester) {
+        val index = _slots.indexOfFirst { it.id == slotId }
+        if (index != -1) {
+            val existing = _slots[index]
+            _slots[index] = existing.copy(semester = existing.semester + semester)
         }
     }
 

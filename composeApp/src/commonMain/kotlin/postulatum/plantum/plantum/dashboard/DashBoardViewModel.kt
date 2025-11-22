@@ -3,10 +3,11 @@ package postulatum.plantum.plantum.dashboard
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.*
 import postulatum.plantum.plantum.repositories.SlotRepository
+import postulatum.plantum.plantum.model.Semester
 import postulatum.plantum.plantum.model.Slot
 
 class DashboardViewModel (
-    private val repository: SlotRepository = SlotRepository()
+    private val slotRepository: SlotRepository = SlotRepository()
 ) : ViewModel() {
     
     // UI State
@@ -21,7 +22,7 @@ class DashboardViewModel (
     private fun loadSlots() {
         _uiState.update { 
             it.copy(
-                slots = repository.getSlots(),
+                slots = slotRepository.getSlots(),
                 isLoading = false
             )
         }
@@ -42,10 +43,10 @@ class DashboardViewModel (
     
     fun addSlot(slot: Slot) {
         // Für jetzt synchron, später async mit viewModelScope
-        repository.addSlot(slot)
+        slotRepository.addSlot(slot)
         _uiState.update { 
             it.copy(
-                slots = repository.getSlots(),
+                slots = slotRepository.getSlots(),
                 showAddDialog = false
             )
         }
@@ -62,18 +63,39 @@ class DashboardViewModel (
     }
     
     fun updateSlot(slot: Slot) {
-        repository.updateSlot(slot)
+        slotRepository.updateSlot(slot)
         _uiState.update { 
             it.copy(
-                slots = repository.getSlots(),
+                slots = slotRepository.getSlots(),
                 slotToEdit = null
             )
         }
     }
     
     fun deleteSlot(slotId: String) {
-        repository.removeSlot(slotId)
-        _uiState.update { it.copy(slots = repository.getSlots()) }
+        slotRepository.removeSlot(slotId)
+        _uiState.update { it.copy(slots = slotRepository.getSlots()) }
+    }
+
+    // Semester Dialog Handling
+    fun showAddSemesterDialogFor(slotId: String) {
+        _uiState.update { it.copy(showAddSemesterDialog = true, slotIdForSemester = slotId) }
+    }
+
+    fun hideAddSemesterDialog() {
+        _uiState.update { it.copy(showAddSemesterDialog = false, slotIdForSemester = null) }
+    }
+
+    fun addSemesterToSelected(semester: Semester) {
+        val slotId = _uiState.value.slotIdForSemester ?: return
+        slotRepository.addSemesterToSlot(slotId, semester)
+        _uiState.update {
+            it.copy(
+                slots = slotRepository.getSlots(),
+                showAddSemesterDialog = false,
+                slotIdForSemester = null
+            )
+        }
     }
     
     // ViewModel wird automatisch cleared, wenn nicht mehr gebraucht
@@ -89,5 +111,7 @@ data class DashboardUiState(
     val isLoading: Boolean = true,
     val showAddDialog: Boolean = false,
     val slotToEdit: Slot? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val showAddSemesterDialog: Boolean = false,
+    val slotIdForSemester: String? = null
 )
