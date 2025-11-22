@@ -2,7 +2,6 @@ package postulatum.plantum.plantum.services
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -23,7 +22,10 @@ class BackendService {
 
         const val BASE_URL = "http://$SERVER_IP:$SERVER_PORT$BASE_ENPOINT"
 
-        val client = HttpClient(CIO){
+        // Do not hardcode a JVM-specific engine (like CIO). Let Ktor pick the
+        // appropriate engine for each platform (JVM, JS Browser, WASM) based
+        // on the engine dependency added in each source set.
+        val client = HttpClient {
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true

@@ -34,7 +34,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(projects.shared)
             implementation(libs.ktorClientCore)
-            implementation(libs.ktorClientCio)
             implementation(libs.ktorSerialization)
             implementation(libs.ktorClientContentNegotiation)
             implementation(libs.kotlinxCoroutines)
@@ -45,6 +44,13 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.ktorClientCio)
+        }
+        jsMain.dependencies {
+            implementation(libs.ktorClientJs)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.ktorClientJs)
         }
     }
 }
