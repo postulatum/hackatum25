@@ -26,7 +26,7 @@ import postulatum.plantum.plantum.model.*
 fun DashboardScreen(
     userName: String?,
     logo: Painter,
-    onLogout: () -> Unit,    
+    onLogout: () -> Unit,
     viewModel: DashboardViewModel = viewModel { DashboardViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -200,7 +200,7 @@ fun DashboardScreen(
                 .fillMaxHeight()
                 .verticalScroll(rightScroll)
         ) {
-            Spacer(Modifier.height(150.dp))
+            Spacer(Modifier.height(96.dp))
 
             CreditSummaryView(
                 sumCredits = sumCredits,
@@ -255,5 +255,5 @@ fun DashboardScreen(
         )
     }
 }
-
+}
 

@@ -15,6 +15,7 @@ import org.jetbrains.compose.resources.stringResource
 import plantum.composeapp.generated.resources.Res
 import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.*
+import postulatum.plantum.plantum.ui.CustomIcons
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -50,10 +51,11 @@ fun AddModuleForm(
                 .padding(start = 12.dp, top = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "✏️",
-                fontSize = 18.sp,
-                modifier = Modifier.padding(end = 8.dp)
+            Icon(
+                imageVector = CustomIcons.Edit,
+                contentDescription = "Edit",
+                modifier = Modifier.size(20.dp).padding(end = 8.dp),
+                tint = Color(0xFF3B82F6)
             )
             Text(
                 text = "Modul bearbeiten",

@@ -37,6 +37,7 @@ import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.Semester
 import postulatum.plantum.plantum.model.Module
 import postulatum.plantum.plantum.model.getDisplayName
+import postulatum.plantum.plantum.ui.CustomIcons
 
 @Composable
 fun SemesterCard(
@@ -207,10 +208,11 @@ fun extendSemesterCard(
                                     onClick = { /* TODO: Bearbeitungsfunktion */ },
                                     modifier = Modifier.size(32.dp)
                                 ) {
-                                    Text(
-                                        text = "✏️",
-                                        fontSize = 16.sp,
-                                        color = Color(0xFF3B82F6)
+                                    Icon(
+                                        imageVector = CustomIcons.Edit,
+                                        contentDescription = "Edit",
+                                        modifier = Modifier.size(18.dp),
+                                        tint = Color(0xFF3B82F6)
                                     )
                                 }
 
@@ -219,10 +221,11 @@ fun extendSemesterCard(
                                     onClick = { /* TODO: Löschfunktion */ },
                                     modifier = Modifier.size(32.dp)
                                 ) {
-                                    Text(
-                                        text = "🗑️",
-                                        fontSize = 16.sp,
-                                        color = Color(0xFFEF4444)
+                                    Icon(
+                                        imageVector = CustomIcons.Delete,
+                                        contentDescription = "Delete",
+                                        modifier = Modifier.size(18.dp),
+                                        tint = Color(0xFFEF4444)
                                     )
                                 }
                             }

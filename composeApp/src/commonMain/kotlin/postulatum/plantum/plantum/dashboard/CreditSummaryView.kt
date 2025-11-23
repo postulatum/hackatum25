@@ -43,7 +43,6 @@ fun CreditSummaryView(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(24.dp)
     ) {
         // State to track which categories are expanded
         var expandedCategories by remember { mutableStateOf(setOf<Category>()) }

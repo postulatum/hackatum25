@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.RoundRect
 import postulatum.plantum.plantum.model.Slot
+import postulatum.plantum.plantum.ui.CustomIcons
 
 @Composable
 fun SlotCard(
@@ -70,9 +71,11 @@ fun SlotCard(
                         onClick = { onEdit(slot) },
                         modifier = Modifier.size(56.dp)
                     ) {
-                        Text(
-                            text = "✏️",
-                            fontSize = 32.sp
+                        Icon(
+                            imageVector = CustomIcons.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(28.dp),
+                            tint = Color(0xFF374151)
                         )
                     }
                 }
