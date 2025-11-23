@@ -26,12 +26,18 @@ import postulatum.plantum.plantum.TotalCreditGoal
 import postulatum.plantum.plantum.model.Category
 import postulatum.plantum.plantum.model.Module
 import postulatum.plantum.plantum.model.getDisplayName
+import postulatum.plantum.plantum.model.Area
+import postulatum.plantum.plantum.model.Semester
 
 @Composable
 fun CreditSummaryView(
     sumCredits: UInt,
     creditsByCategory: Map<Category, UInt>,
     modulesByCategory: Map<Category, List<Module>>,
+    mainSpecialisation: Pair<Area, UInt>?,
+    minorSpecialisations: List<Pair<Area, UInt>>,
+    activatedSemesters: List<Semester>,
+    creditCalculationService: CreditCalculationService?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -41,6 +47,7 @@ fun CreditSummaryView(
     ) {
         // State to track which categories are expanded
         var expandedCategories by remember { mutableStateOf(setOf<Category>()) }
+        var expandedSpecialisations by remember { mutableStateOf(setOf<Area>()) }
 
         // Title
         Text(
@@ -107,54 +114,11 @@ fun CreditSummaryView(
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Info Box (like "Regel für Informatik-Module" in the image)
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFEFF6FF) // Light blue background
-            ),
-            shape = RoundedCornerShape(8.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.Top
-            ) {
-                // Info icon
-                Text(
-                    text = "ℹ️",
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(end = 12.dp)
-                )
-                Column {
-                    Text(
-                        text = stringResource(Res.string.credit_summary_hint_title),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF1E40AF)
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(Res.string.credit_summary_hint_text),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF1E3A8A),
-                        lineHeight = 18.sp
-                    )
-                }
-            }
-        }
-
         Spacer(modifier = Modifier.height(24.dp))
 
         // Category breakdown title
         Text(
-            text = stringResource(Res.string.credit_summary_category_details),
+            text = "Fachgebiete",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF111827)
@@ -190,6 +154,69 @@ fun CreditSummaryView(
             )
 
             Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        // Specialisations section (Schwerpunkt and Nebenschwerpunkte)
+        if (mainSpecialisation != null || minorSpecialisations.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Specialisations title
+            Text(
+                text = "Schwerpunkte",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF111827)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Main Specialisation (Schwerpunkt)
+            mainSpecialisation?.let { (area, credits) ->
+                val isExpanded = expandedSpecialisations.contains(area)
+                val modules = creditCalculationService?.getModulesByArea(activatedSemesters, area) ?: emptyList()
+
+                SpecialisationProgressItem(
+                    areaName = stringResource(area.getDisplayName()),
+                    type = "Schwerpunkt",
+                    achieved = credits,
+                    goal = 18u,
+                    modules = modules,
+                    isExpanded = isExpanded,
+                    onToggleExpand = {
+                        expandedSpecialisations = if (isExpanded) {
+                            expandedSpecialisations - area
+                        } else {
+                            expandedSpecialisations + area
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            // Minor Specialisations (Nebenschwerpunkte)
+            minorSpecialisations.forEach { (area, credits) ->
+                val isExpanded = expandedSpecialisations.contains(area)
+                val modules = creditCalculationService?.getModulesByArea(activatedSemesters, area) ?: emptyList()
+
+                SpecialisationProgressItem(
+                    areaName = stringResource(area.getDisplayName()),
+                    type = null,
+                    achieved = credits,
+                    goal = 8u,
+                    modules = modules,
+                    isExpanded = isExpanded,
+                    onToggleExpand = {
+                        expandedSpecialisations = if (isExpanded) {
+                            expandedSpecialisations - area
+                        } else {
+                            expandedSpecialisations + area
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
 }
@@ -348,14 +375,13 @@ private fun ModuleDetailRow(module: Module) {
             if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = module.area.name,
+                    text = module.area?.name ?: "",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color(0xFF6B7280)
                 )
             }
         }
-    }
 
         Text(
             text = "${module.credits} ECTS",
@@ -365,3 +391,168 @@ private fun ModuleDetailRow(module: Module) {
         )
     }
 }
+
+@Composable
+private fun SpecialisationProgressItem(
+    areaName: String,
+    type: String?, // "Schwerpunkt" or null for Nebenschwerpunkt
+    achieved: UInt,
+    goal: UInt,
+    modules: List<Module>,
+    isExpanded: Boolean,
+    onToggleExpand: () -> Unit
+) {
+    val isComplete = achieved >= goal
+    val progressColor = if (isComplete) Color(0xFF10B981) else Color(0xFF3B82F6)
+    val backgroundColor = if (type == "Schwerpunkt") {
+        // Schwerpunkt has blue border like in the image
+        Color.White
+    } else {
+        Color(0xFFF9FAFB)
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .let { mod ->
+                if (type == "Schwerpunkt") {
+                    mod.then(
+                        Modifier
+                            .background(Color.Transparent)
+                            .padding(2.dp)
+                    )
+                } else {
+                    mod
+                }
+            },
+        colors = CardDefaults.cardColors(
+            containerColor = backgroundColor
+        ),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (type == "Schwerpunkt") 2.dp else 0.dp),
+        border = if (type == "Schwerpunkt") {
+            androidx.compose.foundation.BorderStroke(2.dp, Color(0xFF3B82F6))
+        } else null
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Main row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onToggleExpand() }
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Area info
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = areaName,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF111827)
+                            )
+
+                            // Show type badge for Schwerpunkt
+                            if (type != null) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "($type)",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF3B82F6)
+                                )
+                            }
+                        }
+
+                        // Expand/Collapse indicator
+                        Text(
+                            text = if (isExpanded) "▼" else "▶",
+                            fontSize = 12.sp,
+                            color = Color(0xFF6B7280),
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Progress bar
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color(0xFFE5E7EB))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth((achieved.toFloat() / goal.toFloat()).coerceIn(0f, 1f))
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(progressColor)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Credits display
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "$achieved / $goal",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = progressColor
+                    )
+                    Text(
+                        text = "ECTS",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF6B7280)
+                    )
+                }
+            }
+
+            // Expandable module details
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp)
+                ) {
+                    // Divider
+                    HorizontalDivider(
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        thickness = 1.dp,
+                        color = Color(0xFFE5E7EB)
+                    )
+
+                    if (modules.isEmpty()) {
+                        Text(
+                            text = "Keine Module in diesem Fachgebiet",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFF6B7280),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    } else {
+                        modules.forEach { module ->
+                            ModuleDetailRow(module = module)
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

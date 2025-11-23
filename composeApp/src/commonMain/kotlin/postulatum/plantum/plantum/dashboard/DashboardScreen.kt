@@ -66,7 +66,8 @@ fun DashboardScreen(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = sidePadding),
+                .padding(horizontal = sidePadding)
+                .padding(bottom = 40.dp), // Space for disclaimer
             verticalAlignment = Alignment.Top
         ) {
         // Linke Spalte: Hauptinhalt
@@ -80,7 +81,7 @@ fun DashboardScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(32.dp))
-            // Entfernt: Willkommens- und Dashboard-Titel gemäß Anforderung
+
             Spacer(Modifier.height(16.dp))
             Spacer(Modifier.height(48.dp))
 
@@ -195,6 +196,9 @@ fun DashboardScreen(
 
         val creditsByCategory = creditCalculationService?.calculateCreditCategories(activatedSemesterObjects)
         val sumCredits : UInt = creditCalculationService?.getSumOfCredits(activatedSemesterObjects) ?: 0u
+        val modulesByCategory = creditCalculationService?.getModulesByCategory(activatedSemesterObjects) ?: emptyMap()
+        val mainSpecialisation = creditCalculationService?.getMainSpecialisation(activatedSemesterObjects)
+        val minorSpecialisations = creditCalculationService?.getMinorSpecialisations(activatedSemesterObjects) ?: emptyList()
 
         Column(
             modifier = Modifier
@@ -208,12 +212,34 @@ fun DashboardScreen(
                 sumCredits = sumCredits,
                 creditsByCategory = creditsByCategory ?: emptyMap(),
                 modulesByCategory = modulesByCategory,
+                mainSpecialisation = mainSpecialisation,
+                minorSpecialisations = minorSpecialisations,
+                activatedSemesters = activatedSemesterObjects,
+                creditCalculationService = creditCalculationService,
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        }
-        }  // End of BoxWithConstraints
     }
+
+    // Disclaimer at the bottom - fixed position, unobtrusive
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.BottomCenter)
+            .padding(bottom = 8.dp, start = sidePadding, end = sidePadding),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Disclaimer: Diese Anwendung bietet keine Garantie auf Korrektheit. Bitte verwenden Sie immer die offiziellen Angaben und Dokumente der TUM sowie die Studienberatung für verbindliche Informationen.",
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color(0xFF9CA3AF), // Light gray
+            lineHeight = 14.sp,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+    }
+    }  // End of BoxWithConstraints
     // Show Add Slot Dialog (Create Mode)
     if (uiState.showAddDialog) {
         AddSlotDialog(
