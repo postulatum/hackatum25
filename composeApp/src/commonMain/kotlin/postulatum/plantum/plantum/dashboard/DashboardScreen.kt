@@ -19,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import postulatum.plantum.plantum.StarterHeader
 
 import postulatum.plantum.plantum.model.*
-import postulatum.plantum.plantum.data.DummyData
 
 
 
@@ -32,15 +31,16 @@ fun DashboardScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var extendedSemesterIds by remember { mutableStateOf<Set<String>>(setOf()) }
-    var activatedSemesters by remember { mutableStateOf<Map<Slot, Semester>>(mapOf()) }
+    // Map, where first String is slot.id and second is semester.id
+    var activatedSemesters by remember { mutableStateOf<Map<String, String>>(mapOf()) }
 
     var creditCalculationService by remember { mutableStateOf<CreditCalculationService?>(CreditCalculationService()) }
 
-    // Initialize activatedSemesters to the first semester of each slot when slots are loaded
+    // Initialize activatedSemesters to the first semester id of each slot when slots are loaded
     LaunchedEffect(uiState.slots) {
         if (uiState.slots.isNotEmpty() && activatedSemesters.isEmpty()) {
             activatedSemesters = uiState.slots.mapNotNull { slot ->
-                slot.semester.firstOrNull()?.let { slot to it }
+                slot.semester.firstOrNull()?.let { slot.id to it.id }
             }.toMap()
         }
     }
@@ -114,7 +114,7 @@ fun DashboardScreen(
                                 // Each semester gets a hoverable box showing a checkbox at top-right
                                 val interactionSource = remember { MutableInteractionSource() }
                                 val isHovered by interactionSource.collectIsHoveredAsState()
-                                val isActivated = activatedSemesters[slot] == semester
+                                val isActivated = activatedSemesters[slot.id] == semester.id
                                 val isExtended = extendedSemesterIds.contains(semester.id)
                                 Box(
                                     modifier = Modifier
@@ -133,16 +133,16 @@ fun DashboardScreen(
                                     )
 
                                     if (isHovered) {
-                                        // Checkbox overlay: checked if this semester is the activated one for the slot
-                                        val checked = activatedSemesters[slot] == semester
+                                        // Checkbox overlay: checked if this semester id is the activated one for the slot
+                                        val checked = activatedSemesters[slot.id] == semester.id
                                         Checkbox(
                                             checked = checked,
                                             onCheckedChange = { isChecked ->
                                                 activatedSemesters = activatedSemesters.toMutableMap().apply {
                                                     if (isChecked) {
-                                                        put(slot, semester)
+                                                        put(slot.id, semester.id)
                                                     } else {
-                                                        remove(slot)
+                                                        remove(slot.id)
                                                     }
                                                 }
                                             },
@@ -204,8 +204,13 @@ fun DashboardScreen(
         // Rechte Spalte: Credit Summary (breiter gemacht und nach unten verschoben)
         val rightScroll = rememberScrollState()
 
+        // Map the activated semester ids back to Semester objects for credit calculation
+        val activatedSemesterObjects = activatedSemesters.mapNotNull { (slotId, semesterId) ->
+            uiState.slots.find { it.id == slotId }?.semester?.firstOrNull { it.id == semesterId }
+        }
+
         // Beispielwerte – hier kannst du später echte Werte berechnen
-        val creditsByCategory = creditCalculationService?.calculateCreditCategories(activatedSemesters.values.toList())
+        val creditsByCategory = creditCalculationService?.calculateCreditCategories(activatedSemesterObjects)
         val sumCredits = creditsByCategory?.values?.sum() ?: 0u
 
         Column(
