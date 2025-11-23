@@ -1,10 +1,16 @@
 package postulatum.plantum.plantum.dashboard
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,12 +24,14 @@ import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.CategoryCreditGoals
 import postulatum.plantum.plantum.TotalCreditGoal
 import postulatum.plantum.plantum.model.Category
+import postulatum.plantum.plantum.model.Module
 import postulatum.plantum.plantum.model.getDisplayName
 
 @Composable
 fun CreditSummaryView(
     sumCredits: UInt,
     creditsByCategory: Map<Category, UInt>,
+    modulesByCategory: Map<Category, List<Module>>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -31,6 +39,9 @@ fun CreditSummaryView(
             .fillMaxWidth()
             .padding(24.dp)
     ) {
+        // State to track which categories are expanded
+        var expandedCategories by remember { mutableStateOf(setOf<Category>()) }
+
         // Title
         Text(
             text = stringResource(Res.string.credit_summary_title),
@@ -159,12 +170,23 @@ fun CreditSummaryView(
             } else {
                 (achieved.toFloat() / goal.toFloat()).coerceIn(0f, 1f)
             }
+            val modules = modulesByCategory[category] ?: emptyList()
+            val isExpanded = expandedCategories.contains(category)
 
             CategoryProgressItem(
                 categoryName = stringResource(category.getDisplayName()),
                 achieved = achieved,
                 goal = goal,
-                progress = progress
+                progress = progress,
+                modules = modules,
+                isExpanded = isExpanded,
+                onToggleExpand = {
+                    expandedCategories = if (isExpanded) {
+                        expandedCategories - category
+                    } else {
+                        expandedCategories + category
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -177,7 +199,10 @@ private fun CategoryProgressItem(
     categoryName: String,
     achieved: UInt,
     goal: UInt,
-    progress: Float
+    progress: Float,
+    modules: List<Module>,
+    isExpanded: Boolean,
+    onToggleExpand: () -> Unit
 ) {
     // Determine color based on completion
     val isComplete = achieved >= goal
@@ -192,59 +217,151 @@ private fun CategoryProgressItem(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Category info
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = categoryName,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF111827)
-                )
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Main category row (clickable)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onToggleExpand() }
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Category info
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = categoryName,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF111827)
+                        )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                        // Expand/Collapse indicator
+                        Text(
+                            text = if (isExpanded) "▼" else "▶",
+                            fontSize = 12.sp,
+                            color = Color(0xFF6B7280),
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
 
-                // Progress bar
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(Color.White.copy(alpha = 0.5f))
-                ) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Progress bar
                     Box(
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth(progress)
+                            .fillMaxWidth()
+                            .height(8.dp)
                             .clip(RoundedCornerShape(4.dp))
-                            .background(progressColor)
+                            .background(Color.White.copy(alpha = 0.5f))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(progress)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(progressColor)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Credits display
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "$achieved / $goal",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = progressColor
+                    )
+                    Text(
+                        text = stringResource(Res.string.credit_summary_ects),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF6B7280)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            // Expandable module details
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp)
+                ) {
+                    // Divider
+                    HorizontalDivider(
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        thickness = 1.dp,
+                        color = Color(0xFFE5E7EB)
+                    )
 
-            // Credits display
-            Column(horizontalAlignment = Alignment.End) {
+                    if (modules.isEmpty()) {
+                        Text(
+                            text = "Keine Module in dieser Kategorie",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFF6B7280),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    } else {
+                        modules.forEach { module ->
+                            ModuleDetailRow(module = module)
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ModuleDetailRow(module: Module) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(6.dp))
+            .background(Color.White.copy(alpha = 0.6f))
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = module.name,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color(0xFF111827)
+            )
+            // Show area if it's ELECTIVE
+            if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "$achieved / $goal",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = progressColor
-                )
-                Text(
-                    text = stringResource(Res.string.credit_summary_ects),
+                    text = module.area.name,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.Normal,
                     color = Color(0xFF6B7280)
                 )
             }
         }
     }
 
+        Text(
+            text = "${module.credits} ECTS",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color(0xFF3B82F6)
+        )
+    }
 }

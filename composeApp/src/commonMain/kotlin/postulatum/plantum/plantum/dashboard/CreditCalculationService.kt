@@ -1,6 +1,7 @@
 package postulatum.plantum.plantum.dashboard
 
 import postulatum.plantum.plantum.model.Category
+import postulatum.plantum.plantum.model.Module
 import postulatum.plantum.plantum.model.Semester
 
 class CreditCalculationService() {
@@ -18,6 +19,19 @@ class CreditCalculationService() {
         }
 
         return categoryCredits
+    }
+
+    fun getModulesByCategory(activatedSemesters: List<Semester>): Map<Category, List<Module>> {
+        val modulesByCategory = mutableMapOf<Category, MutableList<Module>>()
+        for (semester in activatedSemesters) {
+            for (module in semester.modules) {
+                if (!modulesByCategory.containsKey(module.category)) {
+                    modulesByCategory[module.category] = mutableListOf()
+                }
+                modulesByCategory[module.category]?.add(module)
+            }
+        }
+        return modulesByCategory
     }
 
     fun getSumOfCredits(activatedSemesters: List<Semester>) : UInt {

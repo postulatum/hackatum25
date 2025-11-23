@@ -57,11 +57,11 @@ fun SlotCard(
                 if (onEdit != null) {
                     IconButton(
                         onClick = { onEdit(slot) },
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(48.dp)
                     ) {
                         Text(
                             text = "✏️",
-                            fontSize = 16.sp
+                            fontSize = 24.sp
                         )
                     }
                 }

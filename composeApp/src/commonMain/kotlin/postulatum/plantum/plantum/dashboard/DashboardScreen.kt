@@ -207,6 +207,7 @@ fun DashboardScreen(
             CreditSummaryView(
                 sumCredits = sumCredits,
                 creditsByCategory = creditsByCategory ?: emptyMap(),
+                modulesByCategory = modulesByCategory,
                 modifier = Modifier.fillMaxWidth()
             )
         }
