@@ -1,7 +1,9 @@
 package postulatum.plantum.plantum.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +33,18 @@ fun DashboardScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var extendedSemesters by remember { mutableStateOf<Set<Semester>>(setOf()) }
+    var activatedSemesters by remember { mutableStateOf<Map<Slot, Semester>>(mapOf()) }
+
+    var creditCalculationService by remember { mutableStateOf<CreditCalculationService?>(CreditCalculationService()) }
+
+    // Initialize activatedSemesters to the first semester of each slot when slots are loaded
+    LaunchedEffect(uiState.slots) {
+        if (uiState.slots.isNotEmpty() && activatedSemesters.isEmpty()) {
+            activatedSemesters = uiState.slots.mapNotNull { slot ->
+                slot.semester.firstOrNull()?.let { slot to it }
+            }.toMap()
+        }
+    }
 
     StarterHeader(
         userName = userName,
@@ -93,7 +107,42 @@ fun DashboardScreen(
                                 }
                             }
                             for (semester in slot.semester) {
-                                SemesterCard(semester = semester, isExtended = extendedSemesters.contains(semester), onClick = { onClickSemester(semester) })
+                                // Each semester gets a hoverable box showing a checkbox at top-right
+                                val interactionSource = remember { MutableInteractionSource() }
+                                val isHovered by interactionSource.collectIsHoveredAsState()
+                                val isActivated = activatedSemesters[slot] == semester
+                                Box(
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .hoverable(interactionSource = interactionSource)
+                                ) {
+                                    SemesterCard(
+                                        semester = semester,
+                                        isExtended = extendedSemesters.contains(semester),
+                                        onClick = { onClickSemester(semester) },
+                                        isActivated = isActivated
+                                    )
+
+                                    if (isHovered) {
+                                        // Checkbox overlay: checked if this semester is the activated one for the slot
+                                        val checked = activatedSemesters[slot] == semester
+                                        Checkbox(
+                                            checked = checked,
+                                            onCheckedChange = { isChecked ->
+                                                activatedSemesters = activatedSemesters.toMutableMap().apply {
+                                                    if (isChecked) {
+                                                        put(slot, semester)
+                                                    } else {
+                                                        remove(slot)
+                                                    }
+                                                }
+                                            },
+                                            modifier = Modifier
+                                                .align(Alignment.TopEnd)
+                                                .padding(6.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                         Spacer(Modifier.height(8.dp))
@@ -123,18 +172,12 @@ fun DashboardScreen(
         val rightScroll = rememberScrollState()
 
         // Beispielwerte – hier kannst du später echte Werte berechnen
+        val creditsByCategory = creditCalculationService?.calculateCreditCategories(activatedSemesters.values.toList())
+        val sumCredits = creditsByCategory?.values?.sum() ?: 0u
+
         CreditSummaryView(
-            sumCredits = 100,
-            creditsByCategory = mapOf(
-                Category.ELECTIVE to 10u,
-                Category.PROFILE to 10u,
-                Category.SOFT_SKILLS to 10u,
-                Category.IDP to 10u,
-                Category.THESIS to 10u,
-                Category.SEMINAR to 10u,
-                Category.PRACTICAL to 10u,
-                Category.MISC to 10u,
-            ),
+            sumCredits = sumCredits,
+            creditsByCategory = creditsByCategory ?: emptyMap(),
             modifier = Modifier
                 .width(320.dp)     // feste Breite, damit sie sichtbar Platz bekommt
                 .fillMaxHeight()

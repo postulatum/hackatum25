@@ -16,5 +16,5 @@ data class Module(
     val examType: ExaminationType,
     val language: Language,
     val isTheoretical: Boolean,
-    val category : Category? = null
+    val category : Category = Category.ELECTIVE
 )

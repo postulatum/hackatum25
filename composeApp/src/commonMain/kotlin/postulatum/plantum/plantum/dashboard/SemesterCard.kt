@@ -15,8 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.stringResource
-import postulatum.plantum.plantum.model.Category
+
 import postulatum.plantum.plantum.model.Semester
 
 @Composable
@@ -24,12 +23,13 @@ fun SemesterCard(
     semester: Semester,
     isExtended: Boolean,
     onClick: (Semester) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isActivated: Boolean = false
 ) {
     if (isExtended) {
-        extendSemesterCard(semester, onClick, modifier)
+        extendSemesterCard(semester, onClick, modifier, isActivated)
     } else {
-        unextendedSemesterCard(semester, onClick, modifier)
+        unextendedSemesterCard(semester, onClick, modifier, isActivated)
     }
 }
 
@@ -37,7 +37,8 @@ fun SemesterCard(
 fun extendSemesterCard(
     semester: Semester,
     onClick: (Semester) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isActivated: Boolean = false
 ) {
     Card(
         modifier = modifier
@@ -49,7 +50,8 @@ fun extendSemesterCard(
                 onClick = { onClick(semester) }
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        border = if (isActivated) androidx.compose.foundation.BorderStroke(3.dp, Color(0xFF3B82F6)) else null
     ) {
         Row(
             modifier = Modifier
@@ -120,7 +122,8 @@ fun extendSemesterCard(
 fun unextendedSemesterCard(
     semester: Semester,
     onClick: (Semester) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isActivated: Boolean = false
 ) {
     Card(
         modifier = modifier
@@ -136,7 +139,8 @@ fun unextendedSemesterCard(
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
-        )
+        ),
+        border = if (isActivated) androidx.compose.foundation.BorderStroke(3.dp, Color(0xFF3B82F6)) else null
     ) {
         Row(
             modifier = Modifier

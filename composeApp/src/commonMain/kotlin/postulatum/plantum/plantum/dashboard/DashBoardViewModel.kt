@@ -7,7 +7,9 @@ import postulatum.plantum.plantum.model.Semester
 import postulatum.plantum.plantum.model.Slot
 
 class DashboardViewModel (
-    private val slotRepository: SlotRepository = SlotRepository()
+    private val slotRepository: SlotRepository = SlotRepository() ,
+    private val creditCalculationService: CreditCalculationService = CreditCalculationService()
+
 ) : ViewModel() {
     
     // UI State

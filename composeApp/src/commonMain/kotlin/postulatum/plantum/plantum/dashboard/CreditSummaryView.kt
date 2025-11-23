@@ -23,7 +23,7 @@ import kotlin.collections.component2
 
 @Composable
 fun CreditSummaryView (
-    sumCredits: Int,
+    sumCredits: UInt,
     creditsByCategory: Map<Category, UInt>,
     modifier: Modifier = Modifier
 ){
