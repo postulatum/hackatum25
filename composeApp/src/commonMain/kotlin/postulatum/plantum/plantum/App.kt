@@ -40,6 +40,7 @@ fun App() {
                 DashboardScreen(
                     userName = user.userName ?: user.name ?: user.email,
                     logo = painterResource(Res.drawable.plantum_logo),
+                    currentLanguage = currentLanguage,
                     onLogout = {
                         UserRepository.clearUser()
                         // Setze den UserState auf null, um LoginScreen zu triggern

@@ -37,6 +37,7 @@ import postulatum.plantum.plantum.localizedStringResource
 fun StarterHeader(
     userName: String?,
     logo: Painter? = null,
+    currentLanguage: String = "de",
     onLogout: () -> Unit,
     onImprintClick: () -> Unit = {},
     onLanguageChange: (String) -> Unit = {},
@@ -133,6 +134,7 @@ fun StarterHeader(
 
                 // Sprach-Umschalter (mit Flaggen) zwischen Profil-Icon und Menü-Button
                 LanguageToggleButton(
+                    currentLanguage = currentLanguage,
                     tumBlueDark = tumBlueDark,
                     onLanguageChange = onLanguageChange
                 )
@@ -225,13 +227,13 @@ fun MenuButtonWithoutIcons(
 // Kleiner runder Button, der zwischen DE/EN umschaltet und Flaggen anzeigt
 @Composable
 fun LanguageToggleButton(
+    currentLanguage: String,
     tumBlueDark: Color,
     onLanguageChange: (String) -> Unit = {}
 ) {
-    var lang by remember { mutableStateOf("de") }
     var expanded by remember { mutableStateOf(false) }
 
-    val flag = when (lang) {
+    val flag = when (currentLanguage) {
         "de" -> "🇩🇪"
         "en" -> "🇬🇧"
         else -> "🏳️"
@@ -265,17 +267,15 @@ fun LanguageToggleButton(
             DropdownMenuItem(
                 text = { Text(localizedStringResource(Res.string.header_language_german)) },
                 onClick = {
-                    lang = "de"
                     expanded = false
-                    onLanguageChange(lang)
+                    onLanguageChange("de")
                 }
             )
             DropdownMenuItem(
                 text = { Text(localizedStringResource(Res.string.header_language_english)) },
                 onClick = {
-                    lang = "en"
                     expanded = false
-                    onLanguageChange(lang)
+                    onLanguageChange("en")
                 }
             )
         }

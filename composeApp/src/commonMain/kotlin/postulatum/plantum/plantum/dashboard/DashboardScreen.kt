@@ -26,6 +26,7 @@ import postulatum.plantum.plantum.model.*
 fun DashboardScreen(
     userName: String?,
     logo: Painter,
+    currentLanguage: String,
     onLogout: () -> Unit,
     onLanguageChange: (String) -> Unit = {},
     viewModel: DashboardViewModel = viewModel { DashboardViewModel() }
@@ -51,6 +52,7 @@ fun DashboardScreen(
         StarterHeader(
             userName = userName,
             logo = logo,
+            currentLanguage = currentLanguage,
             onLogout = onLogout,
             onLanguageChange = onLanguageChange, // <--- SPRACH-CALLBACK WEITERGEGEBEN
             // Optional: Implementierung für das Impressum
