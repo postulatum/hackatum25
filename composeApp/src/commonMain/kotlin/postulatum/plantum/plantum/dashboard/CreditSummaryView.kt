@@ -377,7 +377,7 @@ private fun ModuleDetailRow(module: Module) {
             if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = module.area?.name ?: "",
+                    text = stringResource(module.area?.getDisplayName() ?: Res.string.area_misc),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color(0xFF6B7280)
