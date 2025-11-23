@@ -63,10 +63,10 @@ fun DashboardScreen(
         val leftScroll = rememberScrollState()
         Column(
             modifier = Modifier
-                .weight(0.65f)            // Breiter gemacht für mehr Platz
+                .weight(0.65f)
                 .fillMaxHeight()
                 .verticalScroll(leftScroll)
-                .padding(end = 16.dp), // Abstand zur rechten Spalte
+                .padding(end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(32.dp))
@@ -201,7 +201,6 @@ fun DashboardScreen(
             }
         }
 
-        // Rechte Spalte: Credit Summary (breiter gemacht und nach unten verschoben)
         val rightScroll = rememberScrollState()
 
         // Map the activated semester ids back to Semester objects for credit calculation
@@ -209,17 +208,16 @@ fun DashboardScreen(
             uiState.slots.find { it.id == slotId }?.semester?.firstOrNull { it.id == semesterId }
         }
 
-        // Beispielwerte – hier kannst du später echte Werte berechnen
         val creditsByCategory = creditCalculationService?.calculateCreditCategories(activatedSemesterObjects)
-        val sumCredits = creditsByCategory?.values?.sum() ?: 0u
+        val sumCredits : UInt = creditCalculationService?.getSumOfCredits(activatedSemesterObjects) ?: 0u
 
         Column(
             modifier = Modifier
-                .weight(0.35f)     // Schmaler gemacht (von 0.5f auf 0.35f)
+                .weight(0.35f)
                 .fillMaxHeight()
                 .verticalScroll(rightScroll)
         ) {
-            Spacer(Modifier.height(150.dp))  // Weiter nach unten verschoben
+            Spacer(Modifier.height(150.dp))
 
             CreditSummaryView(
                 sumCredits = sumCredits,

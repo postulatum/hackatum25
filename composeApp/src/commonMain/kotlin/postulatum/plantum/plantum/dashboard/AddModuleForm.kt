@@ -28,7 +28,7 @@ fun AddModuleForm(
     var selectedArea by remember { mutableStateOf(Area.MISC) }
     var credits by remember { mutableStateOf("0") }
     var expanded by remember { mutableStateOf(false) }
-    var selectedCategory = Category.ELECTIVE
+    var selectedCategory: Category
 
     Column(
         modifier = modifier
@@ -221,7 +221,7 @@ fun AddModuleForm(
                             // This is because not all areas are also categories (electives have the category ELECTIVE)
                             selectedCategory = try {
                                 Category.valueOf(selectedArea.name)
-                            } catch (e: IllegalArgumentException) {
+                            } catch (_: IllegalArgumentException) {
                                 Category.ELECTIVE
                             }
                             val module = Module(

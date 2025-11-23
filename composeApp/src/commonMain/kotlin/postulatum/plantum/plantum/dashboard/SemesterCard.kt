@@ -457,16 +457,16 @@ fun EditableSemesterCard(
                         .fillMaxWidth()
                         .focusRequester(focusRequester)
                         .onKeyEvent { keyEvent ->
-                            when {
-                                keyEvent.type == KeyEventType.KeyDown && keyEvent.key == Key.Enter -> {
+                            when (keyEvent.type) {
+                                KeyEventType.KeyDown if keyEvent.key == Key.Enter -> {
                                     // If field is empty, use the suggested name (placeholder)
-                                    val nameToSave = if (semesterName.isBlank()) initialName else semesterName
+                                    val nameToSave = semesterName.ifBlank { initialName }
                                     if (nameToSave.isNotBlank()) {
                                         onSave(nameToSave)
                                     }
                                     true
                                 }
-                                keyEvent.type == KeyEventType.KeyDown && keyEvent.key == Key.Escape -> {
+                                KeyEventType.KeyDown if keyEvent.key == Key.Escape -> {
                                     onCancel()
                                     true
                                 }
@@ -499,7 +499,7 @@ fun EditableSemesterCard(
                 ) {
                     Button(
                         onClick = {
-                            val nameToSave = if (semesterName.isBlank()) initialName else semesterName
+                            val nameToSave = semesterName.ifBlank { initialName }
                             if (nameToSave.isNotBlank()) {
                                 onSave(nameToSave)
                             }

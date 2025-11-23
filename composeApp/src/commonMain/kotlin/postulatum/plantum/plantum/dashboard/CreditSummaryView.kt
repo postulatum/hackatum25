@@ -153,7 +153,7 @@ fun CreditSummaryView(
         CategoryCreditGoals.forEach { (category, goal) ->
             val achieved: UInt = creditsByCategory[category] ?: 0u
             val progress = if (goal == 0u) {
-                1f
+                0f
             } else {
                 (achieved.toFloat() / goal.toFloat()).coerceIn(0f, 1f)
             }

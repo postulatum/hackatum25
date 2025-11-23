@@ -215,7 +215,7 @@ fun AddSlotDialog(
                                     val slot = if (isEditMode) {
                                         // Edit mode: keep existing ID and semesters
                                         Slot(
-                                            id = existingSlot!!.id,
+                                            id = existingSlot.id,
                                             term = selectedTerm,
                                             year = year.toUInt(),
                                             semester = existingSlot.semester, // Keep existing semesters
@@ -227,7 +227,7 @@ fun AddSlotDialog(
                                             id = Uuid.random().toString(),
                                             term = selectedTerm,
                                             year = year.toUInt(),
-                                            semester = listOf<Semester>(), // Empty initially
+                                            semester = listOf(), // Empty initially
                                             description = description.ifBlank { null }
                                         )
                                     }

@@ -9,8 +9,6 @@ import kotlin.random.Random
 
 class DashboardViewModel (
     private val slotRepository: SlotRepository = SlotRepository() ,
-    private val creditCalculationService: CreditCalculationService = CreditCalculationService()
-
 ) : ViewModel() {
     
     // UI State
