@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import org.jetbrains.compose.resources.stringResource
+import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.Module
 import postulatum.plantum.plantum.model.Semester
 import kotlin.uuid.ExperimentalUuidApi
@@ -36,6 +38,8 @@ fun SemesterDialog(
     var suggestionsExpanded by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     val focusManager = LocalFocusManager.current
+
+    val errorNameRequired = stringResource(Res.string.dialog_error_name_required)
 
     val filteredModules = remember(query, availableModules) {
         if (query.isBlank()) availableModules
@@ -67,7 +71,7 @@ fun SemesterDialog(
                         name = it
                         error = null
                     },
-                    label = { Text("Name des Semesters") },
+                    label = { Text(stringResource(Res.string.dialog_semester_name_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF60A5FA),
@@ -82,7 +86,7 @@ fun SemesterDialog(
 
                 Spacer(Modifier.height(16.dp))
 
-                Text("Module auswählen", color = Color.White)
+                Text(stringResource(Res.string.dialog_select_modules), color = Color.White)
                 Spacer(Modifier.height(8.dp))
 
                 Box {
@@ -92,7 +96,7 @@ fun SemesterDialog(
                             query = it
                             suggestionsExpanded = true
                         },
-                        label = { Text("Modul suchen") },
+                        label = { Text(stringResource(Res.string.dialog_search_module)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .onFocusChanged { focusState ->
@@ -190,12 +194,12 @@ fun SemesterDialog(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF9CA3AF))
-                    ) { Text("Abbrechen") }
+                    ) { Text(stringResource(Res.string.button_cancel)) }
 
                     Button(
                         onClick = {
                             if (name.isBlank()) {
-                                error = "Bitte einen Namen angeben."
+                                error = errorNameRequired
                                 return@Button
                             }
                             val selectedModules = availableModules.filter { selected.contains(it.id) }
@@ -208,7 +212,7 @@ fun SemesterDialog(
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
-                    ) { Text("Hinzufügen") }
+                    ) { Text(stringResource(Res.string.button_add)) }
                 }
             }
         }

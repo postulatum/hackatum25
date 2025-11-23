@@ -12,6 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import org.jetbrains.compose.resources.stringResource
+import plantum.composeapp.generated.resources.Res
+import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.*
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -37,6 +40,8 @@ fun AddSlotDialog(
     var year by remember { mutableStateOf(existingSlot?.year?.toString() ?: "") }
     var termMenuExpanded by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val errorYearInvalid = stringResource(Res.string.dialog_error_year_invalid)
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -104,14 +109,14 @@ fun AddSlotDialog(
                             modifier = Modifier.background(Color(0xFF374151))
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Wintersemester (WiSe)", color = Color.White) },
+                                text = { Text(stringResource(Res.string.term_winter), color = Color.White) },
                                 onClick = {
                                     selectedTerm = Term.WISE
                                     termMenuExpanded = false
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("Sommersemester (SoSe)", color = Color.White) },
+                                text = { Text(stringResource(Res.string.term_summer), color = Color.White) },
                                 onClick = {
                                     selectedTerm = Term.SOSE
                                     termMenuExpanded = false
@@ -139,7 +144,7 @@ fun AddSlotDialog(
                             errorMessage = null
                         }
                     },
-                    label = { Text("Jahr") },
+                    label = { Text(stringResource(Res.string.dialog_year_label)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -170,7 +175,7 @@ fun AddSlotDialog(
                         description = it
                         errorMessage = null
                     },
-                    label = { Text("Beschreibung (optional)") },
+                    label = { Text(stringResource(Res.string.dialog_description_label)) },
                     singleLine = false,
                     maxLines = 3,
                     modifier = Modifier.fillMaxWidth(),
@@ -200,7 +205,7 @@ fun AddSlotDialog(
                             contentColor = Color(0xFF9CA3AF)
                         )
                     ) {
-                        Text("Abbrechen")
+                        Text(stringResource(Res.string.button_cancel))
                     }
                     
                     // Confirm
@@ -209,7 +214,7 @@ fun AddSlotDialog(
                             // Validation
                             when {
                                 year.isBlank() || year.length != 4 -> {
-                                    errorMessage = "Bitte ein gültiges Jahr eingeben (4 Ziffern)"
+                                    errorMessage = errorYearInvalid
                                 }
                                 else -> {
                                     val slot = if (isEditMode) {
@@ -240,7 +245,7 @@ fun AddSlotDialog(
                             containerColor = if (isEditMode) Color(0xFF3B82F6) else Color(0xFF10B981)
                         )
                     ) {
-                        Text(if (isEditMode) "Speichern" else "Hinzufügen")
+                        Text(if (isEditMode) stringResource(Res.string.button_save) else stringResource(Res.string.button_add))
                     }
                 }
             }

@@ -30,4 +30,100 @@
     <string name="area_thesis">Master Thesis</string>
     <string name="area_guided">Guided Research</string>
     <string name="area_misc">Other (e.g. Bachelor Recognition)</string>
+
+    <!-- Credit Summary View -->
+    <string name="credit_summary_title">Progress Overview</string>
+    <string name="credit_summary_overall_progress">Overall Master Progress</string>
+    <string name="credit_summary_ects">ECTS</string>
+    <string name="credit_summary_hint_title">Note on Credits</string>
+    <string name="credit_summary_hint_text">The distribution of ECTS points across the various categories must comply with the study regulations.</string>
+    <string name="credit_summary_category_details">Details: Subject Areas</string>
+
+    <!-- Dashboard / Semester Management -->
+    <string name="semester_variant_name">Variant %d</string>
+    <string name="semester_courses_count">%d Courses</string>
+    <string name="semester_add">Add Semester</string>
+    <string name="semester_name_placeholder">Enter semester name...</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="module_add">+ Add Module</string>
+
+    <!-- Module Table Headers -->
+    <string name="module_table_name">MODULE NAME</string>
+    <string name="module_table_area_category">SUBJECT AREA / CATEGORY</string>
+    <string name="module_table_ects">ECTS</string>
+
+    <!-- Semester Dialog -->
+    <string name="dialog_add_semester_title">Add Semester</string>
+    <string name="dialog_semester_name_label">Semester Name</string>
+    <string name="dialog_select_modules">Select Modules</string>
+    <string name="dialog_search_module">Search Module</string>
+    <string name="dialog_error_name_required">Please provide a name.</string>
+    <string name="button_add">Add</string>
+
+    <!-- Add Module Form -->
+    <string name="form_edit_module_title">Edit Module</string>
+    <string name="form_module_name_label">Module Name</string>
+    <string name="form_module_name_placeholder">e.g. Advanced Deep Learning</string>
+    <string name="form_ects_credits_label">ECTS Credits</string>
+    <string name="form_theoretical_module">Theoretical Module</string>
+    <string name="form_subject_area_label">Subject Area</string>
+
+    <!-- Add/Edit Slot Dialog -->
+    <string name="dialog_edit_slot_title">Edit Slot</string>
+    <string name="dialog_add_slot_title">Add New Slot</string>
+    <string name="dialog_semester_type_label">Semester Type</string>
+    <string name="dialog_year_label">Year</string>
+    <string name="dialog_description_label">Description (optional)</string>
+    <string name="dialog_error_year_invalid">Please enter a valid year (4 digits)</string>
+    <string name="term_winter">Winter Semester (WiSe)</string>
+    <string name="term_summer">Summer Semester (SoSe)</string>
+
+    <!-- Login Screen -->
+    <string name="login_tagline">Your Studies. Your Plan. Your Success.</string>
+    <string name="login_welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Please sign in with your username.</string>
+    <string name="login_username_label">Username or Email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_remember_me">Remember Me</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_new_user">New to planTUM?</string>
+    <string name="login_create_account">Create Account</string>
+    <string name="login_error_empty_fields">Please enter email and password.</string>
+    <string name="login_error_failed">Login failed. Please try again.</string>
+
+    <!-- Footer Links -->
+    <string name="footer_privacy">Privacy</string>
+    <string name="footer_imprint">Imprint</string>
+    <string name="footer_help">Help</string>
+
+    <!-- Create User Modal -->
+    <string name="create_user_title">Create New Account</string>
+    <string name="create_user_username">Username</string>
+    <string name="create_user_full_name">Full Name</string>
+    <string name="create_user_email">Email Address</string>
+    <string name="create_user_password">Choose Password</string>
+    <string name="create_user_password_repeat">Repeat Password</string>
+    <string name="create_user_region">Region</string>
+    <string name="create_user_register_button">Register</string>
+    <string name="create_user_error_username_missing">Username is missing.</string>
+    <string name="create_user_error_name_missing">Name is missing.</string>
+    <string name="create_user_error_invalid_email">Invalid email address.</string>
+    <string name="create_user_error_password_short">Password too short (min 6).</string>
+    <string name="create_user_error_password_mismatch">Passwords do not match.</string>
+    <string name="create_user_error_registration_failed">Registration failed.</string>
+    <string name="create_user_success">Registration successful: %s</string>
+
+    <!-- Regions -->
+    <string name="region_germany">Germany (DE)</string>
+    <string name="region_austria">Austria (AT)</string>
+    <string name="region_switzerland">Switzerland (CH)</string>
+    <string name="region_usa">USA (EN-US)</string>
+    <string name="region_uk">UK (EN-GB)</string>
+
+    <!-- Starter Header -->
+    <string name="header_app_title">planTum</string>
+    <string name="header_subtitle">Study Planner for TUM Students</string>
+    <string name="header_from">From Students</string>
 </resources>

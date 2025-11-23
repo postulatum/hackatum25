@@ -32,6 +32,7 @@ import plantum.composeapp.generated.resources.munic
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.BorderStroke
 
+
 @Composable
 fun StarterHeader(
     userName: String?,
@@ -91,19 +92,20 @@ fun StarterHeader(
 
                 Column {
                     Text(
-                        text = "planTUM",
+                        text = "planTum",
                         color = Color.White,
                         fontWeight = FontWeight.ExtraBold,
                         style = MaterialTheme.typography.headlineMedium
                     )
+                    Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "Study Planner for TUM Students",
-                        color = Color.White.copy(alpha = 0.92f),
+                        text = stringResource(Res.string.header_subtitle),
+                        color = Color.White.copy(alpha = 0.95f),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "From Students",
-                        color = Color.White.copy(alpha = 0.85f),
+                        text = stringResource(Res.string.header_from),
+                        color = Color.White.copy(alpha = 0.8f),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

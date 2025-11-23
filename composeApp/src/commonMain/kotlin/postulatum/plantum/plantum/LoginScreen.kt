@@ -23,7 +23,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -33,12 +32,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
-import plantum.composeapp.generated.resources.Res
+import plantum.composeapp.generated.resources.*
 import plantum.composeapp.generated.resources.plantum_logo
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import postulatum.plantum.plantum.model.LoginData
 import postulatum.plantum.plantum.model.RegisterData
 import postulatum.plantum.plantum.model.User
@@ -78,10 +78,13 @@ fun LoginScreen(
 
     val scope = rememberCoroutineScope()
 
+    val errorEmptyFields = stringResource(Res.string.login_error_empty_fields)
+    val errorLoginFailed = stringResource(Res.string.login_error_failed)
+
     fun tryLogin() {
         // Basic validation
         if (username.isBlank() || password.isBlank()) {
-            error = "Bitte E-Mail und Passwort eingeben."
+            error = errorEmptyFields
             return
         }
         error = null
@@ -92,7 +95,7 @@ fun LoginScreen(
                 val display = user.userName?.takeIf { it.isNotBlank() } ?: user.email
                 onLoginSuccess(user)
             } catch (t: Throwable) {
-                error = t.message ?: "Login fehlgeschlagen. Bitte erneut versuchen."
+                error = t.message ?: errorLoginFailed
             } finally {
                 loading = false
             }
@@ -143,7 +146,7 @@ fun LoginScreen(
                         )
                         Spacer(Modifier.height(16.dp))
                         Text(
-                            text = "Dein Studium. Dein Plan. Dein Erfolg.",
+                            text = stringResource(Res.string.login_tagline),
                             color = Color(0xFF94A3B8),
                             fontSize = 24.sp,
                             textAlign = TextAlign.Center
@@ -273,13 +276,13 @@ fun LoginCardContent(
     loginButtonRequester: FocusRequester
 ) {
     Text(
-        text = "Willkommen zurück",
+        text = stringResource(Res.string.login_welcome_back),
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
         color = TextPrimary
     )
     Text(
-        text = "Bitte melde dich mit deinem Benutzernamen an.",
+        text = stringResource(Res.string.login_subtitle),
         fontSize = 14.sp,
         color = TextSecondary,
         modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
@@ -289,7 +292,7 @@ fun LoginCardContent(
     OutlinedTextField(
         value = username,
         onValueChange = onUsernameChange,
-        label = { Text("Benutzername oder E-Mail") },
+        label = { Text(stringResource(Res.string.login_username_label)) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -311,7 +314,7 @@ fun LoginCardContent(
     OutlinedTextField(
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text("Passwort") },
+        label = { Text(stringResource(Res.string.login_password_label)) },
         singleLine = true,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
@@ -356,14 +359,14 @@ fun LoginCardContent(
                 colors = CheckboxDefaults.colors(checkedColor = PrimaryColor)
             )
             Text(
-                text = "Merken",
+                text = stringResource(Res.string.login_remember_me),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextSecondary
             )
         }
 
         Text(
-            text = "Passwort vergessen?",
+            text = stringResource(Res.string.login_forgot_password),
             style = MaterialTheme.typography.bodySmall,
             color = PrimaryColor,
             fontWeight = FontWeight.SemiBold,
@@ -407,7 +410,7 @@ fun LoginCardContent(
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
     ) {
         Text(
-            text = "Anmelden",
+            text = stringResource(Res.string.login_button),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         )
@@ -424,9 +427,9 @@ fun LoginCardContent(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("Neu bei planTUM? ", color = TextSecondary, fontSize = 14.sp)
+        Text(stringResource(Res.string.login_new_user) + " ", color = TextSecondary, fontSize = 14.sp)
         Text(
-            text = "Konto erstellen",
+            text = stringResource(Res.string.login_create_account),
             color = PrimaryColor,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
@@ -444,11 +447,11 @@ fun FooterLinks() {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(bottom = 16.dp)
     ) {
-        Text("Datenschutz", fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
+        Text(stringResource(Res.string.footer_privacy), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
         Text("•", fontSize = 12.sp, color = Color(0xFF9CA3AF))
-        Text("Impressum", fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
+        Text(stringResource(Res.string.footer_imprint), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
         Text("•", fontSize = 12.sp, color = Color(0xFF9CA3AF))
-        Text("Hilfe", fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
+        Text(stringResource(Res.string.footer_help), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
     }
 }
 
@@ -463,11 +466,27 @@ fun CreateUserModal(onDismiss: () -> Unit) {
     var newPassword by remember { mutableStateOf("") }
     var newPasswordRepeat by remember { mutableStateOf("") }
 
-
-    var newUserRegion by remember { mutableStateOf("Deutschland (DE)") }
+    var newUserRegion by remember { mutableStateOf("") }
     var regionMenuExpanded by remember { mutableStateOf(false) }
-    val regions = listOf("Deutschland (DE)", "Österreich (AT)", "Schweiz (CH)", "USA (EN-US)", "UK (EN-GB)")
 
+    val regionGermany = stringResource(Res.string.region_germany)
+    val regionAustria = stringResource(Res.string.region_austria)
+    val regionSwitzerland = stringResource(Res.string.region_switzerland)
+    val regionUSA = stringResource(Res.string.region_usa)
+    val regionUK = stringResource(Res.string.region_uk)
+    val regions = listOf(regionGermany, regionAustria, regionSwitzerland, regionUSA, regionUK)
+
+    val errorUsernameMissing = stringResource(Res.string.create_user_error_username_missing)
+    val errorNameMissing = stringResource(Res.string.create_user_error_name_missing)
+    val errorInvalidEmail = stringResource(Res.string.create_user_error_invalid_email)
+    val errorPasswordShort = stringResource(Res.string.create_user_error_password_short)
+    val errorPasswordMismatch = stringResource(Res.string.create_user_error_password_mismatch)
+    val errorRegistrationFailed = stringResource(Res.string.create_user_error_registration_failed)
+    val successMessageTemplate = stringResource(Res.string.create_user_success)
+
+    LaunchedEffect(Unit) {
+        newUserRegion = regionGermany
+    }
 
     var createError by remember { mutableStateOf<String?>(null) }
     var createInfo by remember { mutableStateOf<String?>(null) }
@@ -476,11 +495,11 @@ fun CreateUserModal(onDismiss: () -> Unit) {
 
 
     fun validateCreate(): String? {
-        if (newUserName.isBlank()) return "Benutzername fehlt."
-        if (newFullName.isBlank()) return "Name fehlt."
-        if (!newEmail.contains("@") || !newEmail.contains(".")) return "Ungültige E-Mail."
-        if (newPassword.length < 6) return "Passwort zu kurz (min 6)."
-        if (newPassword != newPasswordRepeat) return "Passwörter stimmen nicht überein."
+        if (newUserName.isBlank()) return errorUsernameMissing
+        if (newFullName.isBlank()) return errorNameMissing
+        if (!newEmail.contains("@") || !newEmail.contains(".")) return errorInvalidEmail
+        if (newPassword.length < 6) return errorPasswordShort
+        if (newPassword != newPasswordRepeat) return errorPasswordMismatch
         return null
     }
 
@@ -514,7 +533,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Neues Konto erstellen",
+                        text = stringResource(Res.string.create_user_title),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF111827)
@@ -532,7 +551,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newUserName,
                     onValueChange = { newUserName = it; createError = null },
-                    label = { Text("Benutzername") },
+                    label = { Text(stringResource(Res.string.create_user_username)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -546,7 +565,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newFullName,
                     onValueChange = { newFullName = it; createError = null },
-                    label = { Text("Vollständiger Name") },
+                    label = { Text(stringResource(Res.string.create_user_full_name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -560,7 +579,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newEmail,
                     onValueChange = { newEmail = it; createError = null },
-                    label = { Text("E-Mail Adresse") },
+                    label = { Text(stringResource(Res.string.create_user_email)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -574,7 +593,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it; createError = null },
-                    label = { Text("Passwort wählen") },
+                    label = { Text(stringResource(Res.string.create_user_password)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
@@ -589,7 +608,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newPasswordRepeat,
                     onValueChange = { newPasswordRepeat = it; createError = null },
-                    label = { Text("Passwort wiederholen") },
+                    label = { Text(stringResource(Res.string.create_user_password_repeat)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
@@ -610,7 +629,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                         value = newUserRegion,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Region") },
+                        label = { Text(stringResource(Res.string.create_user_region)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = regionMenuExpanded) },
                         modifier = Modifier
                             .menuAnchor()
@@ -666,7 +685,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                         modifier = Modifier.weight(1f).height(48.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Abbrechen", color = Color(0xFF6B7280))
+                        Text(stringResource(Res.string.button_cancel), color = Color(0xFF6B7280))
                     }
 
                     // Create
@@ -691,11 +710,11 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                                             userName = newUserName.ifBlank { null }
                                         )
                                     )
-                                    createInfo = "Registrierung erfolgreich: ${'$'}{user.email}"
+                                    createInfo = successMessageTemplate.replace("{0}", user.email)
                                     // Close the dialog after short success message
                                     onDismiss()
                                 } catch (t: Throwable) {
-                                    createError = t.message ?: "Registrierung fehlgeschlagen."
+                                    createError = t.message ?: errorRegistrationFailed
                                 } finally {
                                     creating = false
                                 }
@@ -712,7 +731,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                                 modifier = Modifier.size(20.dp)
                             )
                         } else {
-                            Text("Registrieren", fontWeight = FontWeight.Bold)
+                            Text(stringResource(Res.string.create_user_register_button), fontWeight = FontWeight.Bold)
                         }
                     }
                 }

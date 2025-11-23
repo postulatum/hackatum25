@@ -13,6 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.stringResource
+import plantum.composeapp.generated.resources.Res
+import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.CategoryCreditGoals
 import postulatum.plantum.plantum.TotalCreditGoal
 import postulatum.plantum.plantum.model.Category
@@ -31,7 +33,7 @@ fun CreditSummaryView(
     ) {
         // Title
         Text(
-            text = "Fortschrittsübersicht",
+            text = stringResource(Res.string.credit_summary_title),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF111827)
@@ -59,13 +61,13 @@ fun CreditSummaryView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Gesamtfortschritt Master",
+                        text = stringResource(Res.string.credit_summary_overall_progress),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
                     )
                     Text(
-                        text = "$sumCredits / $TotalCreditGoal ECTS",
+                        text = "$sumCredits / $TotalCreditGoal ${stringResource(Res.string.credit_summary_ects)}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White.copy(alpha = 0.9f)
@@ -120,14 +122,14 @@ fun CreditSummaryView(
                 )
                 Column {
                     Text(
-                        text = "Hinweis zu den Credits",
+                        text = stringResource(Res.string.credit_summary_hint_title),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color(0xFF1E40AF)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Die Verteilung der ECTS-Punkte auf die verschiedenen Kategorien muss den Studienordnungsvorgaben entsprechen.",
+                        text = stringResource(Res.string.credit_summary_hint_text),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Normal,
                         color = Color(0xFF1E3A8A),
@@ -141,7 +143,7 @@ fun CreditSummaryView(
 
         // Category breakdown title
         Text(
-            text = "Details: Fachgebiete",
+            text = stringResource(Res.string.credit_summary_category_details),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF111827)
@@ -236,7 +238,7 @@ private fun CategoryProgressItem(
                     color = progressColor
                 )
                 Text(
-                    text = "ECTS",
+                    text = stringResource(Res.string.credit_summary_ects),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFF6B7280)

@@ -32,8 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.stringResource
-import plantum.composeapp.generated.resources.Res
-import plantum.composeapp.generated.resources.area_misc
+import plantum.composeapp.generated.resources.*
 
 import postulatum.plantum.plantum.model.Semester
 import postulatum.plantum.plantum.model.Module
@@ -92,7 +91,7 @@ fun extendSemesterCard(
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    text = "${semester.modules.size} Kurse",
+                    text = stringResource(Res.string.semester_courses_count, semester.modules.size),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF374151)
@@ -110,7 +109,7 @@ fun extendSemesterCard(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "MODULNAME",
+                            text = stringResource(Res.string.module_table_name),
                             fontSize = 12.sp,
                             color = Color(0xFF9CA3AF),
                             fontWeight = FontWeight.SemiBold,
@@ -118,7 +117,7 @@ fun extendSemesterCard(
                         )
 
                         Text(
-                            text = "FACHGEBIET / KATEGORIE",
+                            text = stringResource(Res.string.module_table_area_category),
                             fontSize = 12.sp,
                             color = Color(0xFF9CA3AF),
                             fontWeight = FontWeight.SemiBold,
@@ -130,7 +129,7 @@ fun extendSemesterCard(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "ECTS",
+                                text = stringResource(Res.string.module_table_ects),
                                 fontSize = 12.sp,
                                 color = Color(0xFF9CA3AF),
                                 fontWeight = FontWeight.SemiBold,
@@ -266,7 +265,7 @@ fun extendSemesterCard(
                             border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF3B82F6))
                         ) {
                             Text(
-                                text = "+ Modul hinzufügen",
+                                text = stringResource(Res.string.module_add),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
@@ -318,7 +317,7 @@ fun unextendedSemesterCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "${semester.modules.size} Kurse",
+                    text = stringResource(Res.string.semester_courses_count, semester.modules.size),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF374151)
@@ -404,7 +403,7 @@ fun AddSemesterCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Semester hinzufügen",
+                    text = stringResource(Res.string.semester_add),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF0EA5E9)
@@ -483,7 +482,7 @@ fun EditableSemesterCard(
                         Box {
                             if (semesterName.isEmpty()) {
                                 Text(
-                                    text = initialName.ifEmpty { "Semester-Name eingeben..." },
+                                    text = initialName.ifEmpty { stringResource(Res.string.semester_name_placeholder) },
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = Color(0xFF9CA3AF)
@@ -508,7 +507,7 @@ fun EditableSemesterCard(
                             containerColor = Color(0xFF0EA5E9)
                         )
                     ) {
-                        Text("Speichern", fontSize = 13.sp)
+                        Text(stringResource(Res.string.button_save), fontSize = 13.sp)
                     }
                     OutlinedButton(
                         onClick = onCancel,
@@ -516,7 +515,7 @@ fun EditableSemesterCard(
                             contentColor = Color(0xFF6B7280)
                         )
                     ) {
-                        Text("Abbrechen", fontSize = 13.sp)
+                        Text(stringResource(Res.string.button_cancel), fontSize = 13.sp)
                     }
                 }
             }

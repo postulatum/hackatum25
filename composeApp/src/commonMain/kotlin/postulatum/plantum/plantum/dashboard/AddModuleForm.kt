@@ -12,6 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.stringResource
+import plantum.composeapp.generated.resources.Res
+import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.*
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -70,7 +72,7 @@ fun AddModuleForm(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Modulname",
+                        text = stringResource(Res.string.form_module_name_label),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF374151),
@@ -210,7 +212,7 @@ fun AddModuleForm(
                         contentColor = Color(0xFF6B7280)
                     )
                 ) {
-                    Text("Abbrechen", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    Text(stringResource(Res.string.button_cancel), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -254,7 +256,7 @@ fun AddModuleForm(
                         disabledContentColor = Color.White
                     )
                 ) {
-                    Text("Speichern", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(Res.string.button_save), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 }
             }
     }
