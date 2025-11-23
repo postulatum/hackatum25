@@ -1,16 +1,27 @@
 package postulatum.plantum.plantum.dashboard
 
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -266,6 +277,202 @@ fun unextendedSemesterCard(
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF374151)
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun AddSemesterCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isExtended: Boolean = false
+) {
+    Box(
+        modifier = modifier
+            .then(if (isExtended) Modifier.fillMaxWidth() else Modifier.width(280.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = LocalIndication.current,
+                role = Role.Button,
+                onClick = onClick
+            )
+    ) {
+        // Background with slight transparency
+        Surface(
+            modifier = Modifier.matchParentSize(),
+            color = Color.White.copy(alpha = 0.4f),
+            shape = MaterialTheme.shapes.medium
+        ) {}
+
+        // Canvas for dashed border
+        Canvas(
+            modifier = Modifier.matchParentSize()
+        ) {
+            val strokeWidth = 2.dp.toPx()
+            val dashWidth = 10.dp.toPx()
+            val dashGap = 8.dp.toPx()
+            val cornerRadius = 12.dp.toPx()
+
+            val path = Path().apply {
+                addRoundRect(
+                    RoundRect(
+                        left = strokeWidth / 2,
+                        top = strokeWidth / 2,
+                        right = size.width - strokeWidth / 2,
+                        bottom = size.height - strokeWidth / 2,
+                        cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+                    )
+                )
+            }
+
+            drawPath(
+                path = path,
+                color = Color(0xFF0EA5E9),
+                style = Stroke(
+                    width = strokeWidth,
+                    pathEffect = PathEffect.dashPathEffect(
+                        intervals = floatArrayOf(dashWidth, dashGap),
+                        phase = 0f
+                    )
+                )
+            )
+        }
+
+        // Content - matching the structure of unextended semester card
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "+",
+                    fontSize = if (isExtended) 22.sp else 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF0EA5E9)
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Semester hinzufügen",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF0EA5E9)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun EditableSemesterCard(
+    onSave: (String) -> Unit,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier,
+    isExtended: Boolean = false,
+    initialName: String = ""
+) {
+    var semesterName by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
+    Card(
+        modifier = modifier
+            .then(if (isExtended) Modifier.fillMaxWidth() else Modifier.width(280.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
+        ),
+        border = androidx.compose.foundation.BorderStroke(2.dp, Color(0xFF0EA5E9))
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                BasicTextField(
+                    value = semesterName,
+                    onValueChange = { newValue ->
+                        semesterName = newValue
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .onKeyEvent { keyEvent ->
+                            when {
+                                keyEvent.type == KeyEventType.KeyDown && keyEvent.key == Key.Enter -> {
+                                    // If field is empty, use the suggested name (placeholder)
+                                    val nameToSave = if (semesterName.isBlank()) initialName else semesterName
+                                    if (nameToSave.isNotBlank()) {
+                                        onSave(nameToSave)
+                                    }
+                                    true
+                                }
+                                keyEvent.type == KeyEventType.KeyDown && keyEvent.key == Key.Escape -> {
+                                    onCancel()
+                                    true
+                                }
+                                else -> false
+                            }
+                        },
+                    textStyle = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFF000000)
+                    ),
+                    cursorBrush = SolidColor(Color(0xFF0EA5E9)),
+                    decorationBox = { innerTextField ->
+                        Box {
+                            if (semesterName.isEmpty()) {
+                                Text(
+                                    text = initialName.ifEmpty { "Semester-Name eingeben..." },
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = Color(0xFF9CA3AF)
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                )
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            val nameToSave = if (semesterName.isBlank()) initialName else semesterName
+                            if (nameToSave.isNotBlank()) {
+                                onSave(nameToSave)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF0EA5E9)
+                        )
+                    ) {
+                        Text("Speichern", fontSize = 13.sp)
+                    }
+                    OutlinedButton(
+                        onClick = onCancel,
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = Color(0xFF6B7280)
+                        )
+                    ) {
+                        Text("Abbrechen", fontSize = 13.sp)
+                    }
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.*
 import postulatum.plantum.plantum.repositories.SlotRepository
 import postulatum.plantum.plantum.model.Semester
 import postulatum.plantum.plantum.model.Slot
+import kotlin.random.Random
 
 class DashboardViewModel (
     private val slotRepository: SlotRepository = SlotRepository() ,
@@ -79,23 +80,44 @@ class DashboardViewModel (
         _uiState.update { it.copy(slots = slotRepository.getSlots()) }
     }
 
-    // Semester Dialog Handling
-    fun showAddSemesterDialogFor(slotId: String) {
-        _uiState.update { it.copy(showAddSemesterDialog = true, slotIdForSemester = slotId) }
+    // Semester management
+    fun startAddingSemesterFor(slotId: String) {
+        val slot = slotRepository.getSlots().find { it.id == slotId } ?: return
+        val nextVariantNumber = slot.semester.size + 1
+        val suggestedName = "Variante $nextVariantNumber"
+
+        _uiState.update {
+            it.copy(
+                slotIdAddingSemester = slotId,
+                suggestedSemesterName = suggestedName
+            )
+        }
     }
 
-    fun hideAddSemesterDialog() {
-        _uiState.update { it.copy(showAddSemesterDialog = false, slotIdForSemester = null) }
+    fun cancelAddingSemester() {
+        _uiState.update {
+            it.copy(
+                slotIdAddingSemester = null,
+                suggestedSemesterName = null
+            )
+        }
     }
 
-    fun addSemesterToSelected(semester: Semester) {
-        val slotId = _uiState.value.slotIdForSemester ?: return
+    fun saveSemester(slotId: String, semesterName: String) {
+        if (semesterName.isBlank()) return
+
+        val randomId = Random.nextInt(100000, 999999)
+        val semester = Semester(
+            id = "semester_$randomId",
+            name = semesterName,
+            modules = emptyList()
+        )
         slotRepository.addSemesterToSlot(slotId, semester)
         _uiState.update {
             it.copy(
                 slots = slotRepository.getSlots(),
-                showAddSemesterDialog = false,
-                slotIdForSemester = null
+                slotIdAddingSemester = null,
+                suggestedSemesterName = null
             )
         }
     }
@@ -114,6 +136,6 @@ data class DashboardUiState(
     val showAddDialog: Boolean = false,
     val slotToEdit: Slot? = null,
     val errorMessage: String? = null,
-    val showAddSemesterDialog: Boolean = false,
-    val slotIdForSemester: String? = null
+    val slotIdAddingSemester: String? = null,
+    val suggestedSemesterName: String? = null
 )
