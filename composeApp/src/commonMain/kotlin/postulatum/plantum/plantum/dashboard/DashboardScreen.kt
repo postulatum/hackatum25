@@ -174,15 +174,9 @@ fun DashboardScreen(
                 }
             }
 
-            OutlinedButton(
-                onClick = { viewModel.showAddDialog() },
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF10B981))
-            ) {
-                Text(
-                    "Neuen Slot hinzufügen",
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
+            AddSlotCard(
+                onClick = { viewModel.showAddDialog() }
+            )
 
             Spacer(Modifier.height(12.dp))
         }
