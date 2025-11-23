@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.stringResource
+import postulatum.plantum.plantum.localizedStringResource
 import plantum.composeapp.generated.resources.*
 
 import postulatum.plantum.plantum.model.Semester
@@ -92,7 +92,7 @@ fun extendSemesterCard(
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    text = stringResource(Res.string.semester_courses_count, semester.modules.size),
+                    text = "${semester.modules.size} Module",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF374151)
@@ -110,7 +110,7 @@ fun extendSemesterCard(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = stringResource(Res.string.module_table_name),
+                            text = localizedStringResource(Res.string.module_table_name),
                             fontSize = 12.sp,
                             color = Color(0xFF9CA3AF),
                             fontWeight = FontWeight.SemiBold,
@@ -118,7 +118,7 @@ fun extendSemesterCard(
                         )
 
                         Text(
-                            text = stringResource(Res.string.module_table_area_category),
+                            text = localizedStringResource(Res.string.module_table_area_category),
                             fontSize = 12.sp,
                             color = Color(0xFF9CA3AF),
                             fontWeight = FontWeight.SemiBold,
@@ -130,7 +130,7 @@ fun extendSemesterCard(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = stringResource(Res.string.module_table_ects),
+                                text = localizedStringResource(Res.string.module_table_ects),
                                 fontSize = 12.sp,
                                 color = Color(0xFF9CA3AF),
                                 fontWeight = FontWeight.SemiBold,
@@ -175,14 +175,14 @@ fun extendSemesterCard(
                             ) {
                                 if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
                                     Text(
-                                        text = stringResource(module.area?.getDisplayName() ?: Res.string.area_misc), // This should not happen?
+                                        text = localizedStringResource(module.area?.getDisplayName() ?: Res.string.area_misc), // This should not happen?
                                         fontSize = 14.sp,
                                         color = Color(0xFF1F2937),
                                         fontWeight = FontWeight.SemiBold
                                     )
                                 }
                                 Text(
-                                    text = stringResource(module.category.getDisplayName()),
+                                    text = localizedStringResource(module.category.getDisplayName()),
                                     fontSize = 13.sp,
                                     color = Color(0xFF6B7280),
                                     fontWeight = FontWeight.Medium
@@ -205,7 +205,7 @@ fun extendSemesterCard(
 
                                 // Bearbeitungsstift (blau)
                                 IconButton(
-                                    onClick = { /* TODO: Bearbeitungsfunktion */ },
+                                    onClick = { },
                                     modifier = Modifier.size(32.dp)
                                 ) {
                                     Icon(
@@ -218,7 +218,7 @@ fun extendSemesterCard(
 
                                 // Mülltonne (rot)
                                 IconButton(
-                                    onClick = { /* TODO: Löschfunktion */ },
+                                    onClick = { },
                                     modifier = Modifier.size(32.dp)
                                 ) {
                                     Icon(
@@ -268,7 +268,7 @@ fun extendSemesterCard(
                             border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF3B82F6))
                         ) {
                             Text(
-                                text = stringResource(Res.string.module_add),
+                                text = localizedStringResource(Res.string.module_add),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
@@ -320,7 +320,7 @@ fun unextendedSemesterCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = stringResource(Res.string.semester_courses_count, semester.modules.size),
+                    text = "${semester.modules.size} Module",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF374151)
@@ -406,7 +406,7 @@ fun AddSemesterCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = stringResource(Res.string.semester_add),
+                    text = localizedStringResource(Res.string.semester_add),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF0EA5E9)
@@ -485,7 +485,7 @@ fun EditableSemesterCard(
                         Box {
                             if (semesterName.isEmpty()) {
                                 Text(
-                                    text = initialName.ifEmpty { stringResource(Res.string.semester_name_placeholder) },
+                                    text = initialName.ifEmpty { localizedStringResource(Res.string.semester_name_placeholder) },
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = Color(0xFF9CA3AF)
@@ -510,7 +510,7 @@ fun EditableSemesterCard(
                             containerColor = Color(0xFF0EA5E9)
                         )
                     ) {
-                        Text(stringResource(Res.string.button_save), fontSize = 13.sp)
+                        Text(localizedStringResource(Res.string.button_save), fontSize = 13.sp)
                     }
                     OutlinedButton(
                         onClick = onCancel,
@@ -518,7 +518,7 @@ fun EditableSemesterCard(
                             contentColor = Color(0xFF6B7280)
                         )
                     ) {
-                        Text(stringResource(Res.string.button_cancel), fontSize = 13.sp)
+                        Text(localizedStringResource(Res.string.button_cancel), fontSize = 13.sp)
                     }
                 }
             }

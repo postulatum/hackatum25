@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.RoundRect
+import postulatum.plantum.plantum.localizedStringResource
+import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.Slot
 import postulatum.plantum.plantum.ui.CustomIcons
 
@@ -73,7 +75,7 @@ fun SlotCard(
                     ) {
                         Icon(
                             imageVector = CustomIcons.Edit,
-                            contentDescription = "Edit",
+                            contentDescription = localizedStringResource(Res.string.slot_card_edit),
                             modifier = Modifier.size(28.dp),
                             tint = Color(0xFF374151)
                         )
@@ -166,7 +168,7 @@ fun AddSlotCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Neuen Slot hinzufügen",
+                    text = localizedStringResource(Res.string.slot_card_add_new),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF10B981)

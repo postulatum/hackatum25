@@ -126,4 +126,27 @@
     <string name="header_app_title">planTum</string>
     <string name="header_subtitle">Studienplaner für TUM-Studenten</string>
     <string name="header_from">Von Studenten</string>
+    <string name="header_logout">Abmelden</string>
+    <string name="header_menu_imprint">Impressum</string>
+    <string name="header_menu_calendar">Kalender (bald)</string>
+    <string name="header_language_german">🇩🇪  Deutsch</string>
+    <string name="header_language_english">🇬🇧  English</string>
+    <string name="header_profile_settings">Einstellungen</string>
+    <string name="header_profile_study_programs">Studiengänge</string>
+    <string name="header_profile_view">Profil anzeigen</string>
+
+    <!-- Credit Summary View Additional -->
+    <string name="credit_summary_subject_areas">Fachgebiete</string>
+    <string name="credit_summary_specialisations">Schwerpunkte</string>
+    <string name="credit_summary_main_specialisation">Schwerpunkt</string>
+    <string name="credit_summary_no_modules">Keine Module in dieser Kategorie</string>
+
+    <!-- Header Menu Items (not yet using stringResource) -->
+    <string name="header_menu_settings">Einstellungen</string>
+    <string name="header_menu_study_programs">Studiengänge</string>
+    <string name="header_menu_view_profile">Profil anzeigen</string>
+
+    <!-- Slot Card -->
+    <string name="slot_card_edit">Bearbeiten</string>
+    <string name="slot_card_add_new">Neuen Slot hinzufügen</string>
 </resources>

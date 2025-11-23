@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.stringResource
+import postulatum.plantum.plantum.localizedStringResource
 import plantum.composeapp.generated.resources.Res
 import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.*
@@ -74,7 +74,7 @@ fun AddModuleForm(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = stringResource(Res.string.form_module_name_label),
+                        text = localizedStringResource(Res.string.form_module_name_label),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF374151),
@@ -164,7 +164,7 @@ fun AddModuleForm(
                     onExpandedChange = { expanded = !expanded }
                 ) {
                     OutlinedTextField(
-                        value = stringResource(selectedArea.getDisplayName()),
+                        value = localizedStringResource(selectedArea.getDisplayName()),
                         onValueChange = {},
                         readOnly = true,
                         trailingIcon = {
@@ -187,7 +187,7 @@ fun AddModuleForm(
                     ) {
                         Area.entries.forEach { area ->
                             DropdownMenuItem(
-                                text = { Text(stringResource(area.getDisplayName())) },
+                                text = { Text(localizedStringResource(area.getDisplayName())) },
                                 onClick = {
                                     selectedArea = area
                                     expanded = false
@@ -214,7 +214,7 @@ fun AddModuleForm(
                         contentColor = Color(0xFF6B7280)
                     )
                 ) {
-                    Text(stringResource(Res.string.button_cancel), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    Text(localizedStringResource(Res.string.button_cancel), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -258,7 +258,7 @@ fun AddModuleForm(
                         disabledContentColor = Color.White
                     )
                 ) {
-                    Text(stringResource(Res.string.button_save), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(localizedStringResource(Res.string.button_save), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 }
             }
     }

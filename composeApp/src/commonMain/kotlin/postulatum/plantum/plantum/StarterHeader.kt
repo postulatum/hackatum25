@@ -30,7 +30,7 @@ import plantum.composeapp.generated.resources.*
 import plantum.composeapp.generated.resources.munich
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.BorderStroke
-import org.jetbrains.compose.resources.stringResource
+import postulatum.plantum.plantum.localizedStringResource
 
 
 @Composable
@@ -92,19 +92,19 @@ fun StarterHeader(
 
                 Column {
                     Text(
-                        text = "planTum",
+                        text = localizedStringResource(Res.string.header_app_title),
                         color = Color.White,
                         fontWeight = FontWeight.ExtraBold,
                         style = MaterialTheme.typography.headlineMedium
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = stringResource(Res.string.header_subtitle),
+                        text = localizedStringResource(Res.string.header_subtitle),
                         color = Color.White.copy(alpha = 0.95f),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = stringResource(Res.string.header_from),
+                        text = localizedStringResource(Res.string.header_from),
                         color = Color.White.copy(alpha = 0.8f),
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -158,7 +158,7 @@ fun StarterHeader(
                     ),
                     border = BorderStroke(1.dp, Color.White.copy(alpha = 0.9f))
                 ) {
-                    Text("Abmelden", fontWeight = FontWeight.SemiBold)
+                    Text(localizedStringResource(Res.string.header_logout), fontWeight = FontWeight.SemiBold)
                 }
             }
         }
@@ -205,7 +205,7 @@ fun MenuButtonWithoutIcons(
         ) {
             // Impressum
             DropdownMenuItem(
-                text = { Text("Impressum") },
+                text = { Text(localizedStringResource(Res.string.header_menu_imprint)) },
                 onClick = {
                     expanded = false
                     onImprintClick()
@@ -214,7 +214,7 @@ fun MenuButtonWithoutIcons(
 
             // Statischer Kalendereintrag (noch ohne Funktion)
             DropdownMenuItem(
-                text = { Text("Kalender (bald)") },
+                text = { Text(localizedStringResource(Res.string.header_menu_calendar)) },
                 enabled = false,
                 onClick = { /* no-op */ }
             )
@@ -263,7 +263,7 @@ fun LanguageToggleButton(
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("🇩🇪  Deutsch") },
+                text = { Text(localizedStringResource(Res.string.header_language_german)) },
                 onClick = {
                     lang = "de"
                     expanded = false
@@ -271,7 +271,7 @@ fun LanguageToggleButton(
                 }
             )
             DropdownMenuItem(
-                text = { Text("🇬🇧  English") },
+                text = { Text(localizedStringResource(Res.string.header_language_english)) },
                 onClick = {
                     lang = "en"
                     expanded = false
@@ -387,21 +387,21 @@ fun ProfileMenuButton(
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Einstellungen") },
+                text = { Text(localizedStringResource(Res.string.header_menu_settings)) },
                 onClick = {
                     expanded = false
                     onProfileSettingsClick()
                 }
             )
             DropdownMenuItem(
-                text = { Text("Studiengänge") },
+                text = { Text(localizedStringResource(Res.string.header_menu_study_programs)) },
                 onClick = {
                     expanded = false
                     onStudyProgramsClick()
                 }
             )
             DropdownMenuItem(
-                text = { Text("Profil anzeigen") },
+                text = { Text(localizedStringResource(Res.string.header_menu_view_profile)) },
                 onClick = {
                     expanded = false
                     onProfileClick()

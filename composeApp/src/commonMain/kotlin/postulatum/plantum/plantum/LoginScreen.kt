@@ -38,7 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.stringResource
+import postulatum.plantum.plantum.localizedStringResource
 import postulatum.plantum.plantum.model.LoginData
 import postulatum.plantum.plantum.model.RegisterData
 import postulatum.plantum.plantum.model.User
@@ -78,8 +78,8 @@ fun LoginScreen(
 
     val scope = rememberCoroutineScope()
 
-    val errorEmptyFields = stringResource(Res.string.login_error_empty_fields)
-    val errorLoginFailed = stringResource(Res.string.login_error_failed)
+    val errorEmptyFields = localizedStringResource(Res.string.login_error_empty_fields)
+    val errorLoginFailed = localizedStringResource(Res.string.login_error_failed)
 
     fun tryLogin() {
         // Basic validation
@@ -146,7 +146,7 @@ fun LoginScreen(
                         )
                         Spacer(Modifier.height(16.dp))
                         Text(
-                            text = stringResource(Res.string.login_tagline),
+                            text = localizedStringResource(Res.string.login_tagline),
                             color = Color(0xFF94A3B8),
                             fontSize = 24.sp,
                             textAlign = TextAlign.Center
@@ -276,13 +276,13 @@ fun LoginCardContent(
     loginButtonRequester: FocusRequester
 ) {
     Text(
-        text = stringResource(Res.string.login_welcome_back),
+        text = localizedStringResource(Res.string.login_welcome_back),
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
         color = TextPrimary
     )
     Text(
-        text = stringResource(Res.string.login_subtitle),
+        text = localizedStringResource(Res.string.login_subtitle),
         fontSize = 14.sp,
         color = TextSecondary,
         modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
@@ -292,7 +292,7 @@ fun LoginCardContent(
     OutlinedTextField(
         value = username,
         onValueChange = onUsernameChange,
-        label = { Text(stringResource(Res.string.login_username_label)) },
+        label = { Text(localizedStringResource(Res.string.login_username_label)) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -314,7 +314,7 @@ fun LoginCardContent(
     OutlinedTextField(
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text(stringResource(Res.string.login_password_label)) },
+        label = { Text(localizedStringResource(Res.string.login_password_label)) },
         singleLine = true,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
@@ -359,14 +359,14 @@ fun LoginCardContent(
                 colors = CheckboxDefaults.colors(checkedColor = PrimaryColor)
             )
             Text(
-                text = stringResource(Res.string.login_remember_me),
+                text = localizedStringResource(Res.string.login_remember_me),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextSecondary
             )
         }
 
         Text(
-            text = stringResource(Res.string.login_forgot_password),
+            text = localizedStringResource(Res.string.login_forgot_password),
             style = MaterialTheme.typography.bodySmall,
             color = PrimaryColor,
             fontWeight = FontWeight.SemiBold,
@@ -410,7 +410,7 @@ fun LoginCardContent(
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
     ) {
         Text(
-            text = stringResource(Res.string.login_button),
+            text = localizedStringResource(Res.string.login_button),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         )
@@ -427,9 +427,9 @@ fun LoginCardContent(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(stringResource(Res.string.login_new_user) + " ", color = TextSecondary, fontSize = 14.sp)
+        Text(localizedStringResource(Res.string.login_new_user) + " ", color = TextSecondary, fontSize = 14.sp)
         Text(
-            text = stringResource(Res.string.login_create_account),
+            text = localizedStringResource(Res.string.login_create_account),
             color = PrimaryColor,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
@@ -447,11 +447,11 @@ fun FooterLinks() {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(bottom = 16.dp)
     ) {
-        Text(stringResource(Res.string.footer_privacy), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
+        Text(localizedStringResource(Res.string.footer_privacy), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
         Text("•", fontSize = 12.sp, color = Color(0xFF9CA3AF))
-        Text(stringResource(Res.string.footer_imprint), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
+        Text(localizedStringResource(Res.string.footer_imprint), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
         Text("•", fontSize = 12.sp, color = Color(0xFF9CA3AF))
-        Text(stringResource(Res.string.footer_help), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
+        Text(localizedStringResource(Res.string.footer_help), fontSize = 12.sp, color = Color(0xFF9CA3AF), modifier = Modifier.clickable {})
     }
 }
 
@@ -469,20 +469,20 @@ fun CreateUserModal(onDismiss: () -> Unit) {
     var newUserRegion by remember { mutableStateOf("") }
     var regionMenuExpanded by remember { mutableStateOf(false) }
 
-    val regionGermany = stringResource(Res.string.region_germany)
-    val regionAustria = stringResource(Res.string.region_austria)
-    val regionSwitzerland = stringResource(Res.string.region_switzerland)
-    val regionUSA = stringResource(Res.string.region_usa)
-    val regionUK = stringResource(Res.string.region_uk)
+    val regionGermany = localizedStringResource(Res.string.region_germany)
+    val regionAustria = localizedStringResource(Res.string.region_austria)
+    val regionSwitzerland = localizedStringResource(Res.string.region_switzerland)
+    val regionUSA = localizedStringResource(Res.string.region_usa)
+    val regionUK = localizedStringResource(Res.string.region_uk)
     val regions = listOf(regionGermany, regionAustria, regionSwitzerland, regionUSA, regionUK)
 
-    val errorUsernameMissing = stringResource(Res.string.create_user_error_username_missing)
-    val errorNameMissing = stringResource(Res.string.create_user_error_name_missing)
-    val errorInvalidEmail = stringResource(Res.string.create_user_error_invalid_email)
-    val errorPasswordShort = stringResource(Res.string.create_user_error_password_short)
-    val errorPasswordMismatch = stringResource(Res.string.create_user_error_password_mismatch)
-    val errorRegistrationFailed = stringResource(Res.string.create_user_error_registration_failed)
-    val successMessageTemplate = stringResource(Res.string.create_user_success)
+    val errorUsernameMissing = localizedStringResource(Res.string.create_user_error_username_missing)
+    val errorNameMissing = localizedStringResource(Res.string.create_user_error_name_missing)
+    val errorInvalidEmail = localizedStringResource(Res.string.create_user_error_invalid_email)
+    val errorPasswordShort = localizedStringResource(Res.string.create_user_error_password_short)
+    val errorPasswordMismatch = localizedStringResource(Res.string.create_user_error_password_mismatch)
+    val errorRegistrationFailed = localizedStringResource(Res.string.create_user_error_registration_failed)
+    val successMessageTemplate = localizedStringResource(Res.string.create_user_success)
 
     LaunchedEffect(Unit) {
         newUserRegion = regionGermany
@@ -533,7 +533,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(Res.string.create_user_title),
+                        text = localizedStringResource(Res.string.create_user_title),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF111827)
@@ -551,7 +551,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newUserName,
                     onValueChange = { newUserName = it; createError = null },
-                    label = { Text(stringResource(Res.string.create_user_username)) },
+                    label = { Text(localizedStringResource(Res.string.create_user_username)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -565,7 +565,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newFullName,
                     onValueChange = { newFullName = it; createError = null },
-                    label = { Text(stringResource(Res.string.create_user_full_name)) },
+                    label = { Text(localizedStringResource(Res.string.create_user_full_name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -579,7 +579,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newEmail,
                     onValueChange = { newEmail = it; createError = null },
-                    label = { Text(stringResource(Res.string.create_user_email)) },
+                    label = { Text(localizedStringResource(Res.string.create_user_email)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -593,7 +593,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it; createError = null },
-                    label = { Text(stringResource(Res.string.create_user_password)) },
+                    label = { Text(localizedStringResource(Res.string.create_user_password)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
@@ -608,7 +608,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                 OutlinedTextField(
                     value = newPasswordRepeat,
                     onValueChange = { newPasswordRepeat = it; createError = null },
-                    label = { Text(stringResource(Res.string.create_user_password_repeat)) },
+                    label = { Text(localizedStringResource(Res.string.create_user_password_repeat)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
@@ -629,7 +629,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                         value = newUserRegion,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text(stringResource(Res.string.create_user_region)) },
+                        label = { Text(localizedStringResource(Res.string.create_user_region)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = regionMenuExpanded) },
                         modifier = Modifier
                             .menuAnchor()
@@ -685,7 +685,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                         modifier = Modifier.weight(1f).height(48.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text(stringResource(Res.string.button_cancel), color = Color(0xFF6B7280))
+                        Text(localizedStringResource(Res.string.button_cancel), color = Color(0xFF6B7280))
                     }
 
                     // Create
@@ -731,7 +731,7 @@ fun CreateUserModal(onDismiss: () -> Unit) {
                                 modifier = Modifier.size(20.dp)
                             )
                         } else {
-                            Text(stringResource(Res.string.create_user_register_button), fontWeight = FontWeight.Bold)
+                            Text(localizedStringResource(Res.string.create_user_register_button), fontWeight = FontWeight.Bold)
                         }
                     }
                 }

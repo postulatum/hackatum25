@@ -14,36 +14,42 @@ import postulatum.plantum.plantum.repositories.UserRepository
 @Composable
 @Preview
 fun App() {
+    // State for language management
+    var currentLanguage by remember { mutableStateOf("de") } // Default to German
 
     MaterialTheme {
-        var userState by remember { mutableStateOf<User?>(null) }
+        LanguageProvider(language = currentLanguage) {
+            var userState by remember { mutableStateOf<User?>(null) }
 
-        // Needed, otherwise the jit-compiler removes userState.
-        if(userState != null) { print("User correctly initialized. :)") }
+            // Needed, otherwise the jit-compiler removes userState.
+            if(userState != null) { print("User correctly initialized. :)") }
 
-        if(userState != null) { print("User correctly initialized. :)") }
+            if(userState != null) { print("User correctly initialized. :)") }
 
-        if (!UserRepository.isInitialized()) {
-            LoginScreen(
-                onLoginSuccess = { user: User ->
-                    UserRepository.initUser(user)
-                    userState = user
-                }
-            )
-        } else {
-            val user = UserRepository.getUser()
+            if (!UserRepository.isInitialized()) {
+                LoginScreen(
+                    onLoginSuccess = { user: User ->
+                        UserRepository.initUser(user)
+                        userState = user
+                    }
+                )
+            } else {
+                val user = UserRepository.getUser()
 
-            // ANPASSUNG: DashboardScreen MUSS den onLogout-Callback an den Header weitergeben.
-            DashboardScreen(
-                userName = user.userName ?: user.name ?: user.email,
-                // logo = painterResource(Res.drawable.plantum_logo), // Verwende deine tatsächliche Ressource
-                logo = painterResource(Res.drawable.plantum_logo), // Verwende für dieses Beispiel einen Platzhalter-Logo-Painter
-                onLogout = {
-                    UserRepository.clearUser()
-                    // Setze den UserState auf null, um LoginScreen zu triggern
-                    userState = null
-                }
-            )
+                // ANPASSUNG: DashboardScreen MUSS den onLogout-Callback an den Header weitergeben.
+                DashboardScreen(
+                    userName = user.userName ?: user.name ?: user.email,
+                    logo = painterResource(Res.drawable.plantum_logo),
+                    onLogout = {
+                        UserRepository.clearUser()
+                        // Setze den UserState auf null, um LoginScreen zu triggern
+                        userState = null
+                    },
+                    onLanguageChange = { newLanguage ->
+                        currentLanguage = newLanguage
+                    }
+                )
+            }
         }
     }
 }

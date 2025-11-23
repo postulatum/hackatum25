@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
-import org.jetbrains.compose.resources.stringResource
+import postulatum.plantum.plantum.localizedStringResource
 import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.model.Module
 import postulatum.plantum.plantum.model.Semester
@@ -39,7 +39,7 @@ fun SemesterDialog(
     var error by remember { mutableStateOf<String?>(null) }
     val focusManager = LocalFocusManager.current
 
-    val errorNameRequired = stringResource(Res.string.dialog_error_name_required)
+    val errorNameRequired = localizedStringResource(Res.string.dialog_error_name_required)
 
     val filteredModules = remember(query, availableModules) {
         if (query.isBlank()) availableModules
@@ -62,7 +62,7 @@ fun SemesterDialog(
             Column(
                 modifier = Modifier.padding(24.dp).verticalScroll(rememberScrollState())
             ) {
-                Text("Semester hinzufügen", color = Color.White, style = MaterialTheme.typography.titleMedium)
+                Text(localizedStringResource(Res.string.dialog_add_semester_title), color = Color.White, style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.height(12.dp))
 
                 OutlinedTextField(
@@ -71,7 +71,7 @@ fun SemesterDialog(
                         name = it
                         error = null
                     },
-                    label = { Text(stringResource(Res.string.dialog_semester_name_label)) },
+                    label = { Text(localizedStringResource(Res.string.dialog_semester_name_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF60A5FA),
@@ -86,7 +86,7 @@ fun SemesterDialog(
 
                 Spacer(Modifier.height(16.dp))
 
-                Text(stringResource(Res.string.dialog_select_modules), color = Color.White)
+                Text(localizedStringResource(Res.string.dialog_select_modules), color = Color.White)
                 Spacer(Modifier.height(8.dp))
 
                 Box {
@@ -96,7 +96,7 @@ fun SemesterDialog(
                             query = it
                             suggestionsExpanded = true
                         },
-                        label = { Text(stringResource(Res.string.dialog_search_module)) },
+                        label = { Text(localizedStringResource(Res.string.dialog_search_module)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .onFocusChanged { focusState ->
@@ -194,7 +194,7 @@ fun SemesterDialog(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF9CA3AF))
-                    ) { Text(stringResource(Res.string.button_cancel)) }
+                    ) { Text(localizedStringResource(Res.string.button_cancel)) }
 
                     Button(
                         onClick = {
@@ -212,7 +212,7 @@ fun SemesterDialog(
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
-                    ) { Text(stringResource(Res.string.button_add)) }
+                    ) { Text(localizedStringResource(Res.string.button_add)) }
                 }
             }
         }

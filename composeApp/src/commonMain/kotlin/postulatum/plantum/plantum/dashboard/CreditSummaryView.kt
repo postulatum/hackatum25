@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.stringResource
+import postulatum.plantum.plantum.localizedStringResource
 import plantum.composeapp.generated.resources.Res
 import plantum.composeapp.generated.resources.*
 import postulatum.plantum.plantum.CategoryCreditGoals
@@ -54,7 +54,7 @@ fun CreditSummaryView(
 
         // Title
         Text(
-            text = stringResource(Res.string.credit_summary_title),
+            text = localizedStringResource(Res.string.credit_summary_title),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF111827)
@@ -82,13 +82,13 @@ fun CreditSummaryView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(Res.string.credit_summary_overall_progress),
+                        text = localizedStringResource(Res.string.credit_summary_overall_progress),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
                     )
                     Text(
-                        text = "$sumCredits / $TotalCreditGoal ${stringResource(Res.string.credit_summary_ects)}",
+                        text = "$sumCredits / $TotalCreditGoal ${localizedStringResource(Res.string.credit_summary_ects)}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White.copy(alpha = 0.9f)
@@ -121,7 +121,7 @@ fun CreditSummaryView(
 
         // Category breakdown title
         Text(
-            text = "Fachgebiete",
+            text = localizedStringResource(Res.string.credit_summary_subject_areas),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF111827)
@@ -141,7 +141,7 @@ fun CreditSummaryView(
             val isExpanded = expandedCategories.contains(category)
 
             CategoryProgressItem(
-                categoryName = stringResource(category.getDisplayName()),
+                categoryName = localizedStringResource(category.getDisplayName()),
                 achieved = achieved,
                 goal = goal,
                 progress = progress,
@@ -165,7 +165,7 @@ fun CreditSummaryView(
 
             // Specialisations title
             Text(
-                text = "Schwerpunkte",
+                text = localizedStringResource(Res.string.credit_summary_specialisations),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF111827)
@@ -179,8 +179,8 @@ fun CreditSummaryView(
                 val modules = creditCalculationService?.getModulesByArea(activatedSemesters, area) ?: emptyList()
 
                 SpecialisationProgressItem(
-                    areaName = stringResource(area.getDisplayName()),
-                    type = "Schwerpunkt",
+                    areaName = localizedStringResource(area.getDisplayName()),
+                    type = localizedStringResource(Res.string.credit_summary_main_specialisation),
                     achieved = credits,
                     goal = 18u,
                     modules = modules,
@@ -203,7 +203,7 @@ fun CreditSummaryView(
                 val modules = creditCalculationService?.getModulesByArea(activatedSemesters, area) ?: emptyList()
 
                 SpecialisationProgressItem(
-                    areaName = stringResource(area.getDisplayName()),
+                    areaName = localizedStringResource(area.getDisplayName()),
                     type = null,
                     achieved = credits,
                     goal = 8u,
@@ -309,7 +309,7 @@ private fun CategoryProgressItem(
                         color = progressColor
                     )
                     Text(
-                        text = stringResource(Res.string.credit_summary_ects),
+                        text = localizedStringResource(Res.string.credit_summary_ects),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF6B7280)
@@ -337,7 +337,7 @@ private fun CategoryProgressItem(
 
                     if (modules.isEmpty()) {
                         Text(
-                            text = "Keine Module in dieser Kategorie",
+                            text = localizedStringResource(Res.string.credit_summary_no_modules),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Normal,
                             color = Color(0xFF6B7280),
@@ -397,7 +397,7 @@ private fun ModuleDetailRow(module: Module) {
 @Composable
 private fun SpecialisationProgressItem(
     areaName: String,
-    type: String?, // "Schwerpunkt" or null for Nebenschwerpunkt
+    type: String?, // Translated text like "Main Specialisation" or null for minor
     achieved: UInt,
     goal: UInt,
     modules: List<Module>,
@@ -406,8 +406,9 @@ private fun SpecialisationProgressItem(
 ) {
     val isComplete = achieved >= goal
     val progressColor = if (isComplete) Color(0xFF10B981) else Color(0xFF3B82F6)
-    val backgroundColor = if (type == "Schwerpunkt") {
-        // Schwerpunkt has blue border like in the image
+    val isMainSpecialisation = type != null
+    val backgroundColor = if (isMainSpecialisation) {
+        // Main specialisation has blue border like in the image
         Color.White
     } else {
         Color(0xFFF9FAFB)
@@ -417,7 +418,7 @@ private fun SpecialisationProgressItem(
         modifier = Modifier
             .fillMaxWidth()
             .let { mod ->
-                if (type == "Schwerpunkt") {
+                if (isMainSpecialisation) {
                     mod.then(
                         Modifier
                             .background(Color.Transparent)
@@ -431,8 +432,8 @@ private fun SpecialisationProgressItem(
             containerColor = backgroundColor
         ),
         shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (type == "Schwerpunkt") 2.dp else 0.dp),
-        border = if (type == "Schwerpunkt") {
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isMainSpecialisation) 2.dp else 0.dp),
+        border = if (isMainSpecialisation) {
             androidx.compose.foundation.BorderStroke(2.dp, Color(0xFF3B82F6))
         } else null
     ) {
@@ -539,7 +540,7 @@ private fun SpecialisationProgressItem(
 
                     if (modules.isEmpty()) {
                         Text(
-                            text = "Keine Module in diesem Fachgebiet",
+                            text = localizedStringResource(Res.string.credit_summary_no_modules),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Normal,
                             color = Color(0xFF6B7280),
