@@ -121,7 +121,14 @@ class DashboardViewModel (
             )
         }
     }
-    
+
+    fun addModuleToSemester(slotId: String, semesterId: String, module: postulatum.plantum.plantum.model.Module) {
+        slotRepository.addModuleToSemester(slotId, semesterId, module)
+        _uiState.update {
+            it.copy(slots = slotRepository.getSlots())
+        }
+    }
+
     // ViewModel wird automatisch cleared, wenn nicht mehr gebraucht
     override fun onCleared() {
         super.onCleared()

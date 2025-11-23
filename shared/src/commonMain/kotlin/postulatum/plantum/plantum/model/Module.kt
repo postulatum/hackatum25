@@ -10,7 +10,7 @@ data class Module(
     val id: String,
     val tumId: String,
     val name: String,
-    val area: Area,
+    val area: Area?,
     val workload: Workload,
     val credits: UInt,
     val examType: ExaminationType,

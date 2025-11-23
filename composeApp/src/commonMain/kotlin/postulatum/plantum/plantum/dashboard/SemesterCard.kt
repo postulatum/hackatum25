@@ -8,6 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -26,8 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.stringResource
+import plantum.composeapp.generated.resources.Res
+import plantum.composeapp.generated.resources.area_misc
 
 import postulatum.plantum.plantum.model.Semester
+import postulatum.plantum.plantum.model.Module
+import postulatum.plantum.plantum.model.getDisplayName
 
 @Composable
 fun SemesterCard(
@@ -35,10 +45,11 @@ fun SemesterCard(
     isExtended: Boolean,
     onClick: (Semester) -> Unit,
     modifier: Modifier = Modifier,
-    isActivated: Boolean = false
+    isActivated: Boolean = false,
+    onAddModule: ((Semester, Module) -> Unit)? = null
 ) {
     if (isExtended) {
-        extendSemesterCard(semester, onClick, modifier, isActivated)
+        extendSemesterCard(semester, onClick, modifier, isActivated, onAddModule)
     } else {
         unextendedSemesterCard(semester, onClick, modifier, isActivated)
     }
@@ -49,7 +60,8 @@ fun extendSemesterCard(
     semester: Semester,
     onClick: (Semester) -> Unit,
     modifier: Modifier = Modifier,
-    isActivated: Boolean = false
+    isActivated: Boolean = false,
+    onAddModule: ((Semester, Module) -> Unit)? = null
 ) {
     Card(
         modifier = modifier
@@ -163,14 +175,14 @@ fun extendSemesterCard(
                             ) {
                                 if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
                                     Text(
-                                        text = module.area.name,
+                                        text = stringResource(module.area?.getDisplayName() ?: Res.string.area_misc), // This should not happen?
                                         fontSize = 14.sp,
                                         color = Color(0xFF1F2937),
                                         fontWeight = FontWeight.SemiBold
                                     )
                                 }
                                 Text(
-                                    text = module.category.name,
+                                    text = stringResource(module.category.getDisplayName()),
                                     fontSize = 13.sp,
                                     color = Color(0xFF6B7280),
                                     fontWeight = FontWeight.Medium
@@ -223,6 +235,40 @@ fun extendSemesterCard(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 thickness = 0.5.dp,
                                 color = Color(0xFFE5E7EB)
+                            )
+                        }
+                    }
+                }
+
+                // Add Module Button and Form
+                if (onAddModule != null) {
+                    var showAddForm by remember { mutableStateOf(false) }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    if (showAddForm) {
+                        AddModuleForm(
+                            onAddModule = { module ->
+                                onAddModule(semester, module)
+                                showAddForm = false
+                            },
+                            onCancel = { showAddForm = false },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    } else {
+                        // + Button to show form
+                        OutlinedButton(
+                            onClick = { showAddForm = true },
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = Color(0xFF3B82F6)
+                            ),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF3B82F6))
+                        ) {
+                            Text(
+                                text = "+ Modul hinzufügen",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
                             )
                         }
                     }

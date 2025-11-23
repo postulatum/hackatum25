@@ -59,4 +59,22 @@ class SlotRepository {
     fun getSlotById(slotId: String): Slot? {
         return _slots.firstOrNull { it.id == slotId }
     }
+
+    /**
+     * Add a module to a specific semester within a slot.
+     */
+    fun addModuleToSemester(slotId: String, semesterId: String, module: postulatum.plantum.plantum.model.Module) {
+        val slotIndex = _slots.indexOfFirst { it.id == slotId }
+        if (slotIndex != -1) {
+            val slot = _slots[slotIndex]
+            val updatedSemesters = slot.semester.map { semester ->
+                if (semester.id == semesterId) {
+                    semester.copy(modules = semester.modules + module)
+                } else {
+                    semester
+                }
+            }
+            _slots[slotIndex] = slot.copy(semester = updatedSemesters)
+        }
+    }
 }

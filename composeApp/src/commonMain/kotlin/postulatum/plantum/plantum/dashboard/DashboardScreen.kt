@@ -31,7 +31,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = viewModel { DashboardViewModel() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var extendedSemesters by remember { mutableStateOf<Set<Semester>>(setOf()) }
+    var extendedSemesterIds by remember { mutableStateOf<Set<String>>(setOf()) }
     var activatedSemesters by remember { mutableStateOf<Map<Slot, Semester>>(mapOf()) }
 
     var creditCalculationService by remember { mutableStateOf<CreditCalculationService?>(CreditCalculationService()) }
@@ -104,10 +104,10 @@ fun DashboardScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             fun onClickSemester(semester: Semester) {
-                                if (extendedSemesters.contains(semester)) {
-                                    extendedSemesters -= semester
+                                if (extendedSemesterIds.contains(semester.id)) {
+                                    extendedSemesterIds -= semester.id
                                 } else {
-                                    extendedSemesters += semester
+                                    extendedSemesterIds += semester.id
                                 }
                             }
                             for (semester in slot.semester) {
@@ -115,7 +115,7 @@ fun DashboardScreen(
                                 val interactionSource = remember { MutableInteractionSource() }
                                 val isHovered by interactionSource.collectIsHoveredAsState()
                                 val isActivated = activatedSemesters[slot] == semester
-                                val isExtended = extendedSemesters.contains(semester)
+                                val isExtended = extendedSemesterIds.contains(semester.id)
                                 Box(
                                     modifier = Modifier
                                         .then(if (isExtended) Modifier.fillMaxWidth() else Modifier)
@@ -126,7 +126,10 @@ fun DashboardScreen(
                                         semester = semester,
                                         isExtended = isExtended,
                                         onClick = { onClickSemester(semester) },
-                                        isActivated = isActivated
+                                        isActivated = isActivated,
+                                        onAddModule = { sem, module ->
+                                            viewModel.addModuleToSemester(slot.id, sem.id, module)
+                                        }
                                     )
 
                                     if (isHovered) {
