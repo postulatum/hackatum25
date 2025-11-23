@@ -29,6 +29,10 @@ import postulatum.plantum.plantum.model.getDisplayName
 import postulatum.plantum.plantum.model.Area
 import postulatum.plantum.plantum.model.Semester
 
+// Consistent layout slots for list rows
+private val ArrowColumnWidth = 24.dp
+private val CreditsColumnMinWidth = 72.dp
+
 @Composable
 fun CreditSummaryView(
     sumCredits: UInt,
@@ -252,28 +256,26 @@ private fun CategoryProgressItem(
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Category info
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = categoryName,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF111827)
-                        )
+                // Arrow column (fixed width)
+                Box(
+                    modifier = Modifier.width(ArrowColumnWidth),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isExpanded) "▼" else "▶",
+                        fontSize = 12.sp,
+                        color = Color(0xFF6B7280)
+                    )
+                }
 
-                        // Expand/Collapse indicator
-                        Text(
-                            text = if (isExpanded) "▼" else "▶",
-                            fontSize = 12.sp,
-                            color = Color(0xFF6B7280),
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                    }
+                // Category info (takes remaining space)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = categoryName,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF111827)
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -295,10 +297,11 @@ private fun CategoryProgressItem(
                     }
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
-
-                // Credits display
-                Column(horizontalAlignment = Alignment.End) {
+                // Credits display (fixed min width, right-aligned)
+                Column(
+                    modifier = Modifier.widthIn(min = CreditsColumnMinWidth),
+                    horizontalAlignment = Alignment.End
+                ) {
                     Text(
                         text = "$achieved / $goal",
                         fontSize = 18.sp,
@@ -323,7 +326,7 @@ private fun CategoryProgressItem(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp)
+                        .padding(start = 16.dp + ArrowColumnWidth, end = 16.dp, bottom = 16.dp, top = 0.dp)
                 ) {
                     // Divider
                     HorizontalDivider(
@@ -442,40 +445,38 @@ private fun SpecialisationProgressItem(
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Area info
+                // Arrow column (fixed width)
+                Box(
+                    modifier = Modifier.width(ArrowColumnWidth),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isExpanded) "▼" else "▶",
+                        fontSize = 12.sp,
+                        color = Color(0xFF6B7280)
+                    )
+                }
+
+                // Area info (takes remaining space)
                 Column(modifier = Modifier.weight(1f)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = areaName,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF111827)
-                            )
-
-                            // Show type badge for Schwerpunkt
-                            if (type != null) {
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "($type)",
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = Color(0xFF3B82F6)
-                                )
-                            }
-                        }
-
-                        // Expand/Collapse indicator
+                    Column {
                         Text(
-                            text = if (isExpanded) "▼" else "▶",
-                            fontSize = 12.sp,
-                            color = Color(0xFF6B7280),
-                            modifier = Modifier.padding(end = 8.dp)
+                            text = areaName,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF111827)
                         )
+
+                        // Show type badge for Schwerpunkt
+                        if (type != null) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "($type)",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF3B82F6)
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -498,10 +499,11 @@ private fun SpecialisationProgressItem(
                     }
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
-
-                // Credits display
-                Column(horizontalAlignment = Alignment.End) {
+                // Credits display (fixed min width, right-aligned)
+                Column(
+                    modifier = Modifier.widthIn(min = CreditsColumnMinWidth),
+                    horizontalAlignment = Alignment.End
+                ) {
                     Text(
                         text = "$achieved / $goal",
                         fontSize = 18.sp,
@@ -509,7 +511,7 @@ private fun SpecialisationProgressItem(
                         color = progressColor
                     )
                     Text(
-                        text = "ECTS",
+                        text = stringResource(Res.string.credit_summary_ects),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF6B7280)
@@ -526,7 +528,7 @@ private fun SpecialisationProgressItem(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp)
+                        .padding(start = 16.dp + ArrowColumnWidth, end = 16.dp, bottom = 16.dp, top = 0.dp)
                 ) {
                     // Divider
                     HorizontalDivider(
