@@ -9,6 +9,8 @@ import org.bson.codecs.configuration.CodecRegistries
 import org.bson.codecs.configuration.CodecRegistries.fromProviders
 import org.bson.codecs.configuration.CodecRegistries.fromRegistries
 import org.bson.codecs.pojo.PojoCodecProvider
+import postulatum.plantum.plantum.data.Mock
+import postulatum.plantum.plantum.model.Module
 
 object MongoService {
     // Wähle den Namen deiner Datenbank, z.B. "planTUM_production"
@@ -49,5 +51,9 @@ object MongoService {
             println("MongoDB Ping fehlgeschlagen: ${e.message}")
             false
         }
+    }
+
+    suspend fun getAllModules(): List<Module> {
+        return Mock.allModules.toList()
     }
 }

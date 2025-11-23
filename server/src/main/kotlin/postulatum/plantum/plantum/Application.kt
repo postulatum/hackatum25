@@ -165,6 +165,21 @@ fun Application.configureRouting() {
                     }
                 }
             }
+            route("/modules") {
+                get {
+                    try {
+                        val modules = MongoService.getAllModules() // returns mock while DB is down
+                        call.respond(modules)
+                    } catch (e: Exception) {
+                        log.error("Fehler beim Abrufen der Module", e)
+                        call.respondText(
+                            "Datenbankfehler: Konnte Module nicht abrufen.",
+                            status = HttpStatusCode.InternalServerError
+                        )
+                    }
+                }
+            }
+
         }
     }
 }
