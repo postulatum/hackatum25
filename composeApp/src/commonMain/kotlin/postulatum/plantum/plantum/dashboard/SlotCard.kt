@@ -38,18 +38,18 @@ fun SlotCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = slot.displayName,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF111827)
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFF000000)
                     )
                     // Show description if available
                     slot.description?.let { desc ->
                         Spacer(Modifier.height(4.dp))
                         Text(
                             text = desc,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color(0xFF6B7280)
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF374151)
                         )
                     }
                 }

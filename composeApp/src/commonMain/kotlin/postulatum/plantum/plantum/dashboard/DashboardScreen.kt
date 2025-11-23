@@ -1,6 +1,5 @@
 package postulatum.plantum.plantum.dashboard
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -50,17 +49,21 @@ fun DashboardScreen(
         userName = userName,
         logo = logo
     )
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.Top
-    ) {
+
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val sidePadding = maxWidth * 0.10f
+
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = sidePadding),
+            verticalAlignment = Alignment.Top
+        ) {
         // Linke Spalte: Hauptinhalt
         val leftScroll = rememberScrollState()
         Column(
             modifier = Modifier
-                .weight(1f)            // statt fillMaxSize()
+                .weight(0.65f)            // Breiter gemacht für mehr Platz
                 .fillMaxHeight()
                 .verticalScroll(leftScroll)
                 .padding(end = 16.dp), // Abstand zur rechten Spalte
@@ -70,17 +73,18 @@ fun DashboardScreen(
 
             Text(
                 text = "Willkommen, $userName!",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF111827)
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFF000000)
             )
 
             Spacer(Modifier.height(16.dp))
 
             Text(
                 text = "TUM Masterplaner Dashboard",
-                fontSize = 16.sp,
-                color = Color(0xFF6B7280)
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF374151)
             )
 
             Spacer(Modifier.height(48.dp))
@@ -93,11 +97,11 @@ fun DashboardScreen(
                         slot = slot,
                         onEdit = { viewModel.showEditDialog(it) }
                     ) {
-                        Row(
+                        FlowRow(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             fun onClickSemester(semester: Semester) {
                                 if (extendedSemesters.contains(semester)) {
@@ -111,14 +115,16 @@ fun DashboardScreen(
                                 val interactionSource = remember { MutableInteractionSource() }
                                 val isHovered by interactionSource.collectIsHoveredAsState()
                                 val isActivated = activatedSemesters[slot] == semester
+                                val isExtended = extendedSemesters.contains(semester)
                                 Box(
                                     modifier = Modifier
+                                        .then(if (isExtended) Modifier.fillMaxWidth() else Modifier)
                                         .padding(4.dp)
                                         .hoverable(interactionSource = interactionSource)
                                 ) {
                                     SemesterCard(
                                         semester = semester,
-                                        isExtended = extendedSemesters.contains(semester),
+                                        isExtended = isExtended,
                                         onClick = { onClickSemester(semester) },
                                         isActivated = isActivated
                                     )
@@ -149,7 +155,12 @@ fun DashboardScreen(
                         OutlinedButton(
                             onClick = { viewModel.showAddSemesterDialogFor(slot.id) },
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF0EA5E9))
-                        ) { Text("Semester hinzufügen") }
+                        ) {
+                            Text(
+                                "Semester hinzufügen",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
                     Spacer(Modifier.height(24.dp))
                 }
@@ -158,34 +169,49 @@ fun DashboardScreen(
             OutlinedButton(
                 onClick = { viewModel.showAddDialog() },
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF10B981))
-            ) { Text("Neuen Slot hinzufügen") }
+            ) {
+                Text(
+                    "Neuen Slot hinzufügen",
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
 
             Spacer(Modifier.height(12.dp))
 
             OutlinedButton(
                 onClick = onLogout,
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFEF4444))
-            ) { Text("Abmelden") }
+            ) {
+                Text(
+                    "Abmelden",
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
 
-        // Rechte Spalte: Credit Summary
+        // Rechte Spalte: Credit Summary (breiter gemacht und nach unten verschoben)
         val rightScroll = rememberScrollState()
 
         // Beispielwerte – hier kannst du später echte Werte berechnen
         val creditsByCategory = creditCalculationService?.calculateCreditCategories(activatedSemesters.values.toList())
         val sumCredits = creditsByCategory?.values?.sum() ?: 0u
 
-        CreditSummaryView(
-            sumCredits = sumCredits,
-            creditsByCategory = creditsByCategory ?: emptyMap(),
+        Column(
             modifier = Modifier
-                .width(320.dp)     // feste Breite, damit sie sichtbar Platz bekommt
+                .weight(0.35f)     // Schmaler gemacht (von 0.5f auf 0.35f)
                 .fillMaxHeight()
                 .verticalScroll(rightScroll)
-        )
+        ) {
+            Spacer(Modifier.height(150.dp))  // Weiter nach unten verschoben
+
+            CreditSummaryView(
+                sumCredits = sumCredits,
+                creditsByCategory = creditsByCategory ?: emptyMap(),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
-
-
+    }  // End of BoxWithConstraints
     // Show Add Slot Dialog (Create Mode)
     if (uiState.showAddDialog) {
         AddSlotDialog(

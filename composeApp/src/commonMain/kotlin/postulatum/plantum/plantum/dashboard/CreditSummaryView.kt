@@ -30,6 +30,9 @@ fun CreditSummaryView (
     Column(modifier = modifier.padding(16.dp)) {
         Text(
             text = "Total credits: $sumCredits / $TotalCreditGoal",
+            style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+            color = androidx.compose.ui.graphics.Color(0xFF000000)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -50,13 +53,19 @@ fun CreditSummaryView (
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = stringResource(category.getDisplayName()),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
+                            color = androidx.compose.ui.graphics.Color(0xFF000000)
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
                             text = "$achieved / $goal",
+                            style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                            color = androidx.compose.ui.graphics.Color(0xFF1F2937)
                         )
                     }
 
@@ -66,7 +75,7 @@ fun CreditSummaryView (
                         progress = progress,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(6.dp)
+                            .height(8.dp)
                     )
                 }
             }

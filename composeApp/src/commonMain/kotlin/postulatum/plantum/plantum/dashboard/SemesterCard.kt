@@ -42,7 +42,7 @@ fun extendSemesterCard(
 ) {
     Card(
         modifier = modifier
-            .width(560.dp)
+            .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = LocalIndication.current,
@@ -63,57 +63,160 @@ fun extendSemesterCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = semester.name,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF111827)
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF000000)
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
                     text = "${semester.modules.size} Kurse",
-                    fontSize = 14.sp,
-                    color = Color(0xFF6B7280)
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF374151)
                 )
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(16.dp))
 
-                // Preview up to 3 modules: title + category on the left, credits on the right
-                Column {
-                    semester.modules.take(3).forEach { module ->
+                // Module list as table
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    // Column headers
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp, horizontal = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "MODULNAME",
+                            fontSize = 12.sp,
+                            color = Color(0xFF9CA3AF),
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.weight(0.4f).padding(end = 16.dp)
+                        )
+
+                        Text(
+                            text = "FACHGEBIET / KATEGORIE",
+                            fontSize = 12.sp,
+                            color = Color(0xFF9CA3AF),
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.weight(0.3f).padding(end = 16.dp)
+                        )
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "ECTS",
+                                fontSize = 12.sp,
+                                color = Color(0xFF9CA3AF),
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.width(30.dp)
+                            )
+                            // Spacer für die Icon-Buttons
+                            Spacer(modifier = Modifier.size(32.dp))
+                            Spacer(modifier = Modifier.size(32.dp))
+                        }
+                    }
+
+                    // Trennlinie unter den Headers
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                        thickness = 1.dp,
+                        color = Color(0xFFE5E7EB)
+                    )
+
+                    semester.modules.forEach { module ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                                .padding(vertical = 8.dp, horizontal = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+                            // Links: Modulname (mit fester Breite für einheitlichen Abstand)
+                            Text(
+                                text = module.name,
+                                fontSize = 16.sp,
+                                color = Color(0xFF000000),
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(0.4f).padding(end = 16.dp)
+                            )
 
-                            Column(modifier = Modifier.weight(1f)) {
+                            // Mitte: Area (nur bei ELECTIVE) mit Kategorie
+                            Column(
+                                modifier = Modifier.weight(0.3f).padding(end = 16.dp),
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
+                                    Text(
+                                        text = module.area.name,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF1F2937),
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
                                 Text(
-                                    text = module.name,
+                                    text = module.category.name,
                                     fontSize = 13.sp,
-                                    color = Color(0xFF111827),
-                                    fontWeight = FontWeight.Medium,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    color = Color(0xFF6B7280),
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
 
+                            // Rechts: Credits + Icons
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Credits
+                                Text(
+                                    text = "${module.credits}",
+                                    fontSize = 16.sp,
+                                    color = Color(0xFF000000),
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.width(30.dp)
+                                )
 
-                            Text(
-                                text = "${module.credits} ECTS",
-                                fontSize = 13.sp,
-                                color = Color(0xFF374151),
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.padding(start = 12.dp)
+                                // Bearbeitungsstift (blau)
+                                IconButton(
+                                    onClick = { /* TODO: Bearbeitungsfunktion */ },
+                                    modifier = Modifier.size(32.dp)
+                                ) {
+                                    Text(
+                                        text = "✏️",
+                                        fontSize = 16.sp,
+                                        color = Color(0xFF3B82F6)
+                                    )
+                                }
+
+                                // Mülltonne (rot)
+                                IconButton(
+                                    onClick = { /* TODO: Löschfunktion */ },
+                                    modifier = Modifier.size(32.dp)
+                                ) {
+                                    Text(
+                                        text = "🗑️",
+                                        fontSize = 16.sp,
+                                        color = Color(0xFFEF4444)
+                                    )
+                                }
+                            }
+                        }
+
+                        // Trennlinie zwischen Modulen
+                        if (module != semester.modules.last()) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(vertical = 4.dp),
+                                thickness = 0.5.dp,
+                                color = Color(0xFFE5E7EB)
                             )
                         }
                     }
                 }
             }
-
-            Text(
-                text = "→",
-                fontSize = 24.sp,
-                color = Color(0xFF0EA5E9)
-            )
         }
     }
 }
@@ -152,24 +255,18 @@ fun unextendedSemesterCard(
             Column {
                 Text(
                     text = semester.name,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF111827)
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF000000)
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = "${semester.modules.size} Kurse",
-                    fontSize = 14.sp,
-                    color = Color(0xFF6B7280)
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF374151)
                 )
             }
-
-            // Pfeil-Icon als Indikator für Interaktivität
-            Text(
-                text = "→",
-                fontSize = 20.sp,
-                color = Color(0xFF0EA5E9)
-            )
         }
     }
 }
