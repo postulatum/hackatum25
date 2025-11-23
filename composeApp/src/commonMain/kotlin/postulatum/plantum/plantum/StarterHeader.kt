@@ -340,6 +340,14 @@ fun LinksQuickAccessButton(
                     onExternalLinkClick("https://www.tum.de/")
                 }
             )
+            // New: CIT Master Informatik Studienpläne
+            DropdownMenuItem(
+                text = { Text("CIT Studienpläne (M. Informatik)") },
+                onClick = {
+                    expanded = false
+                    onExternalLinkClick("https://www.cit.tum.de/cit/studium/studiengaenge/master-informatik/studienplaene/")
+                }
+            )
         }
     }
 }
