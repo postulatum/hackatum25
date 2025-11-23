@@ -45,12 +45,22 @@ fun DashboardScreen(
         }
     }
 
-    StarterHeader(
-        userName = userName,
-        logo = logo
-    )
+    // Layout-Fix: Column sorgt dafür, dass der Header oben fix bleibt
+    Column(modifier = Modifier.fillMaxSize()) {
+        StarterHeader(
+            userName = userName,
+            logo = logo,
+            onLogout = onLogout, // <--- HIER WIRD DER LOGOUT-CALLBACK ÜBERGEBEN
+            // Optional: Implementierung für das Impressum
+            onImprintClick = {
+                // Hier könnte eine Navigation oder ein Dialog für das Impressum ausgelöst werden
+                println("Impressum clicked!")
+            }
+        )
 
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        BoxWithConstraints(modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)) {
         val sidePadding = maxWidth * 0.10f
 
         Row(
@@ -70,23 +80,8 @@ fun DashboardScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(32.dp))
-
-            Text(
-                text = "Willkommen, $userName!",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF000000)
-            )
-
+            // Entfernt: Willkommens- und Dashboard-Titel gemäß Anforderung
             Spacer(Modifier.height(16.dp))
-
-            Text(
-                text = "TUM Masterplaner Dashboard",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF374151)
-            )
-
             Spacer(Modifier.height(48.dp))
 
             if (uiState.isLoading) {
@@ -189,16 +184,6 @@ fun DashboardScreen(
             }
 
             Spacer(Modifier.height(12.dp))
-
-            OutlinedButton(
-                onClick = onLogout,
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFEF4444))
-            ) {
-                Text(
-                    "Abmelden",
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
         }
 
         val rightScroll = rememberScrollState()
@@ -225,8 +210,9 @@ fun DashboardScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        }
+        }  // End of BoxWithConstraints
     }
-    }  // End of BoxWithConstraints
     // Show Add Slot Dialog (Create Mode)
     if (uiState.showAddDialog) {
         AddSlotDialog(

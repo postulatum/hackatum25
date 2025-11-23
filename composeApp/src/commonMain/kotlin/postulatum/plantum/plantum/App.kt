@@ -21,6 +21,8 @@ fun App() {
         // Needed, otherwise the jit-compiler removes userState.
         if(userState != null) { print("User correctly initialized. :)") }
 
+        if(userState != null) { print("User correctly initialized. :)") }
+
         if (!UserRepository.isInitialized()) {
             LoginScreen(
                 onLoginSuccess = { user: User ->
@@ -30,12 +32,19 @@ fun App() {
             )
         } else {
             val user = UserRepository.getUser()
+
+            // ANPASSUNG: DashboardScreen MUSS den onLogout-Callback an den Header weitergeben.
             DashboardScreen(
-                userName = user.name,
-                logo = painterResource(Res.drawable.plantum_logo),
-                onLogout = { UserRepository.clearUser() }
+                userName = user.userName ?: user.name ?: user.email,
+                // logo = painterResource(Res.drawable.plantum_logo), // Verwende deine tatsächliche Ressource
+                logo = painterResource(Res.drawable.plantum_logo), // Verwende für dieses Beispiel einen Platzhalter-Logo-Painter
+                onLogout = {
+                    UserRepository.clearUser()
+                    // Setze den UserState auf null, um LoginScreen zu triggern
+                    userState = null
+                }
             )
         }
     }
-
 }
+
