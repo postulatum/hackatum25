@@ -377,7 +377,7 @@ private fun ModuleDetailRow(module: Module) {
             if (module.category == postulatum.plantum.plantum.model.Category.ELECTIVE) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = stringResource(module.area?.getDisplayName() ?: Res.string.area_misc),
+                    text = localizedStringResource(module.area?.getDisplayName() ?: Res.string.area_misc),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color(0xFF6B7280)
@@ -512,7 +512,7 @@ private fun SpecialisationProgressItem(
                         color = progressColor
                     )
                     Text(
-                        text = stringResource(Res.string.credit_summary_ects),
+                        text = localizedStringResource(Res.string.credit_summary_ects),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF6B7280)
