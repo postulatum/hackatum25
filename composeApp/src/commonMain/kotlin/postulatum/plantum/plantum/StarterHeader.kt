@@ -18,19 +18,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import plantum.composeapp.generated.resources.Res
-import plantum.composeapp.generated.resources.munic
+import plantum.composeapp.generated.resources.*
+import plantum.composeapp.generated.resources.munich
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.BorderStroke
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -60,7 +60,7 @@ fun StarterHeader(
 
         // 🔥 Große, sichtbare Skyline als echter Hintergrund-Layer
         Image(
-            painter = painterResource(Res.drawable.munic),
+            painter = painterResource(Res.drawable.munich),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth(0.4f)
